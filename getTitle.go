@@ -2,13 +2,16 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"crypto/tls"
 	"flag"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/net/html/charset"
 	"golang.org/x/text/transform"
+
+	//"golang.org/x/text/encoding/simplifiedchinese"
+	//"golang.org/x/text/transform"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -23,22 +26,15 @@ var fileName=flag.String("f","","filename")
 var routineCountTotal=flag.Int("t",15,"thread")
 var splitTool string
 
-
-//func GbkToUtf8(s []byte) ([]byte, error) {                                            //网页中文编码转换
-//	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
-//	d, e := ioutil.ReadAll(reader)
-//	if e != nil {
-//		return nil, e
-//	}
-//	return d, nil
-//}
-func gbkToUtf8(input string) (string,error) {
-	reader:=transform.NewReader(bytes.NewReader([]byte(input)),simplifiedchinese.GBK.NewDecoder())
-	d,err:=ioutil.ReadAll(reader)
-	if err!=nil{
-		return "", err
+func determineDecoding(rep io.Reader) (io.Reader,error) {                                 //处理网页编码问题
+	OldReader := bufio.NewReader(rep)
+	bytes, err := OldReader.Peek(1024)
+	if err != nil {
+		return rep,err
 	}
-	return string(d),nil
+	e, _, _ := charset.DetermineEncoding(bytes, "")
+	reader := transform.NewReader(OldReader, e.NewDecoder())
+	return reader,nil
 }
 
 func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
@@ -83,14 +79,12 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	}else {
 		server+="NULL_server!"
 	}
-	doc,err:=goquery.NewDocumentFromReader(res.Body)
+	tempBody,_:=determineDecoding(res.Body)
+	doc,err:=goquery.NewDocumentFromReader(tempBody)
 	if err!=nil{
 		return "Fail to parse response!",err
 	}
-	title,err:=gbkToUtf8(strings.TrimSpace(doc.Find("title").First().Text()))
-	if err!=nil{
-		return "Fail to decode string!",err
-	}
+	title:=strings.TrimSpace(doc.Find("title").First().Text())
 	if title==""{
 		title+="NULL_title!"
 	}
