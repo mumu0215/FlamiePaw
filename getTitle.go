@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -17,8 +18,9 @@ import (
 const routineCountTotal = 15  //线程
 var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
 var fileName=flag.String("f","","filename")
+var splitTool string
 
-func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {
+func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
 	//baseUrl:="https://blog.csdn.net/iamlihongwei/article/details/78854899"
 	//userAgent :="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
 	//client:=&http.Client{Transport: &http.Transport{
@@ -30,7 +32,7 @@ func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep ch
 		}else {
 			temp,err:=oneWorker(client,url)
 			if err!=nil{
-				fmt.Println("Wrong in place: "+temp)
+				fmt.Println(url+": "+temp)
 				//rep <-err.Error()
 			}else {
 				rep<-temp
@@ -42,13 +44,13 @@ func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep ch
 func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	req, err := http.NewRequest("GET", baseUrl, nil)
 	if err!=nil{
-		return  "1",err
+		return  "Fail to create request!",err
 	}
 	req.Header.Add("User-Agent", userAgent)
 	req.Header.Add("Referer", baseUrl)
 	res, err := client.Do(req)
 	if err!=nil{
-		return "2",err
+		return "Error occur at Sending Request!",err
 	}
 	defer res.Body.Close()
 	//fmt.Println(res.StatusCode)
@@ -61,7 +63,7 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	}
 	doc,err:=goquery.NewDocumentFromReader(res.Body)
 	if err!=nil{
-		return "3",err
+		return "Fail to parse response!",err
 	}
 	title:=strings.TrimSpace(doc.Find("title").First().Text())
 	if title==""{
@@ -76,8 +78,18 @@ func getTxtToList(fileName string) []string {
 		fmt.Println("fail to open file")
 		os.Exit(0)
 	}
+	switch runtime.GOOS {
+	case "windows":
+		splitTool="\r\n"
+	case "linux":
+		splitTool="\n"
+	case "darwin":
+		splitTool="\r"
+	default:
+		splitTool="\r\n"
+	}
     data:=strings.TrimSpace(string(dataByte))
-    return strings.Split(data,"\r\n")
+    return strings.Split(data,splitTool)
 }
 func main() {
 	flag.Parse()
@@ -88,11 +100,12 @@ func main() {
 	target:=make(chan string)
 	result:=make(chan string)
 	if *fileName==""{
+		fmt.Println("FileName input Needed!")
 		os.Exit(0)
 	}
 	fileResult,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
-		fmt.Println("fail to open result file")
+		fmt.Println("Fail to open file for result")
 		os.Exit(0)
 	}
 	defer fileResult.Close()
@@ -100,13 +113,13 @@ func main() {
 	//接受结果，并处理判断信号
 	go func() {
 		for rep :=range result{
-			if rep==""{
+			if rep==""{            //中断信号
 				close(result)
 			}else {
 				//文件处理传出结果
 				//fileResult.WriteString(rep+"\r\n")
 				tempList:=strings.Split(rep,"\t")
-				fmt.Fprintf(buf,"%-60s\t%s\t%-20s\t%s\n",tempList[0],tempList[1],tempList[2],tempList[3])
+				fmt.Fprintf(buf,"%-60s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
 				buf.Flush()
 			}
 		}
