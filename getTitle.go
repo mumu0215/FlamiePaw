@@ -14,10 +14,10 @@ import (
 	"strings"
 	"sync"
 )
-
-const routineCountTotal = 15  //线程
+ //routineCountTotal 线程
 var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
 var fileName=flag.String("f","","filename")
+var routineCountTotal=flag.Int("t",15,"thread")
 var splitTool string
 
 func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
@@ -103,6 +103,10 @@ func main() {
 		fmt.Println("FileName input Needed!")
 		os.Exit(0)
 	}
+	if *routineCountTotal<1{
+		fmt.Println("Thread must more than one!")
+		os.Exit(0)
+	}
 	fileResult,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for result")
@@ -125,7 +129,7 @@ func main() {
 		}
 	}()
 
-	for i:=0;i<routineCountTotal;i++{
+	for i:=0;i<*routineCountTotal;i++{
 		wg.Add(1)
 		go getOne(wg,client,target,result)
 	}
