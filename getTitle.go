@@ -2,10 +2,13 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"crypto/tls"
 	"flag"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -19,6 +22,24 @@ var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KH
 var fileName=flag.String("f","","filename")
 var routineCountTotal=flag.Int("t",15,"thread")
 var splitTool string
+
+
+//func GbkToUtf8(s []byte) ([]byte, error) {                                            //网页中文编码转换
+//	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+//	d, e := ioutil.ReadAll(reader)
+//	if e != nil {
+//		return nil, e
+//	}
+//	return d, nil
+//}
+func gbkToUtf8(input string) (string,error) {
+	reader:=transform.NewReader(bytes.NewReader([]byte(input)),simplifiedchinese.GBK.NewDecoder())
+	d,err:=ioutil.ReadAll(reader)
+	if err!=nil{
+		return "", err
+	}
+	return string(d),nil
+}
 
 func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
 	//baseUrl:="https://blog.csdn.net/iamlihongwei/article/details/78854899"
@@ -48,6 +69,7 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	}
 	req.Header.Add("User-Agent", userAgent)
 	req.Header.Add("Referer", baseUrl)
+	req.Header.Set("Accept-Encoding","")
 	res, err := client.Do(req)
 	if err!=nil{
 		return "Error occur at Sending Request!",err
@@ -65,7 +87,10 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	if err!=nil{
 		return "Fail to parse response!",err
 	}
-	title:=strings.TrimSpace(doc.Find("title").First().Text())
+	title,err:=gbkToUtf8(strings.TrimSpace(doc.Find("title").First().Text()))
+	if err!=nil{
+		return "Fail to decode string!",err
+	}
 	if title==""{
 		title+="NULL_title!"
 	}
