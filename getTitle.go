@@ -8,6 +8,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/transform"
+	"net/url"
 
 	//"golang.org/x/text/encoding/simplifiedchinese"
 	//"golang.org/x/text/transform"
@@ -24,6 +25,7 @@ import (
 var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
 var fileName=flag.String("f","","filename")
 var routineCountTotal=flag.Int("t",15,"thread")
+var myProxy=flag.String("p","","proxy")
 var splitTool string
 
 func determineDecoding(rep io.Reader) (io.Reader,error) {                                 //处理网页编码问题
@@ -115,6 +117,15 @@ func main() {
 	client:=&http.Client{Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}}             //复用client
+	if *myProxy!=""{
+		proxy := func(_ *http.Request) (*url.URL, error) {
+			return url.Parse(strings.TrimSpace(*myProxy))
+		}
+		client=&http.Client{Transport:&http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			Proxy:                  proxy,
+		}}
+	}
 	wg:=&sync.WaitGroup{}
 	target:=make(chan string)
 	result:=make(chan string)
