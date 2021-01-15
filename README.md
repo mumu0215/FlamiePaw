@@ -2,11 +2,14 @@
 
 ### Usage:
 ```
-gettitle.exe -f ipList.txt -t 15
-   -f string
+Usage of getTitle.exe:
+  -f string
         filename
-   -t int
+  -p string
+        proxy
+  -t int
         thread (default 15)
+
 ```
 
 
