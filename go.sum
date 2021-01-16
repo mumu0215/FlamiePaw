@@ -4,6 +4,8 @@ github.com/andybalholm/cascadia v1.1.0 h1:BuuO6sSfQNFRu1LppgbD25Hr2vLYW25JvxHs5z
 github.com/andybalholm/cascadia v1.1.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/modood/table v0.0.0-20200225102042-88de94bb9876 h1:B4Xx3qOvn+rJip+843KkfIn0zefjyr6A5FS5PjMlpLY=
 github.com/modood/table v0.0.0-20200225102042-88de94bb9876/go.mod h1:41qyXVI5QH9/ObyPj27CGCVau5v/njfc3Gjj7yzr0HQ=
+github.com/n0ncetonic/nmapxml v0.0.0-20180817022017-0d628218dd06 h1:Sk1cqUAFYSYzVwUKowOpo9VkWVdxdKRJoyeGG5gPXjI=
+github.com/n0ncetonic/nmapxml v0.0.0-20180817022017-0d628218dd06/go.mod h1:/F3nV/XzoLI2vUHcLJXsoZrxeH2SOkI9dG2oVnnPL3s=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20180218175443-cbe0f9307d01/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20200202094626-16171245cfb2 h1:CCH4IOTTfewWjGOlSp+zGcjutRKlBEZQ6wTn8ozI/nI=
