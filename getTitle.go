@@ -75,7 +75,7 @@ func init()  {
 func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
 	for url :=range baseUrl{
 		if url==""{
-			close(baseUrl)
+			close(baseUrl)             //关闭target channel
 		}else {
 			temp,err:=oneWorker(client,url)
 			if err!=nil{
@@ -135,7 +135,7 @@ func main() {
 	client:=&http.Client{Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}}             //复用client
-	if *myProxy!=""{
+	if *myProxy!=""{                   //设置代理
 		proxy := func(_ *http.Request) (*url.URL, error) {
 			return url.Parse(strings.TrimSpace(*myProxy))
 		}
@@ -179,7 +179,7 @@ func main() {
 	for _,baseUrl:=range getTxtToList(*urlFileName){
 		target <-baseUrl
 	}
-	target<-""   //工作结束
+	target<-""   //工作分发结束
 	wg.Wait()
-	result<-""
+	result<-""   //发出结果中断信号
 }
