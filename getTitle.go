@@ -6,45 +6,73 @@ import (
 	"flag"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/text/transform"
-	"net/url"
-
-	//"golang.org/x/text/encoding/simplifiedchinese"
-	//"golang.org/x/text/transform"
-	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"runtime"
+	"src/common"
 	"strconv"
 	"strings"
 	"sync"
 )
  //routineCountTotal 线程
-var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
-var fileName=flag.String("f","","filename")
-var routineCountTotal=flag.Int("t",15,"thread")
-var myProxy=flag.String("p","","proxy")
-var splitTool string
+var(
+	userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
 
-func determineDecoding(rep io.Reader) (io.Reader,error) {                                 //处理网页编码问题
-	OldReader := bufio.NewReader(rep)
-	bytes, err := OldReader.Peek(1024)
-	if err != nil {
-		return rep,err
+	splitTool string           //换行符
+
+	mode=flag.Int("m",0,"mode choice,1:parse from url list,-uF Needed;" +
+		"2:parse from port scan file,-pF or -xF Needed")
+	routineCountTotal=flag.Int("t",15,"thread")
+	myProxy=flag.String("p","","proxy")
+	urlFileName=flag.String("uF","","url file name")
+	portScanFileName=flag.String("pF","","yujian port scan file")
+	nmapXmlFileName=flag.String("xF","","nmap output xmlFileName")
+)
+
+func init()  {
+	//解析命令行，判断参数合法
+	flag.Parse()
+	if *routineCountTotal<1{
+		fmt.Println("Thread must more than one!")
+		os.Exit(0)
 	}
-	e, _, _ := charset.DetermineEncoding(bytes, "")
-	reader := transform.NewReader(OldReader, e.NewDecoder())
-	return reader,nil
+	if *mode==0{
+		fmt.Println("Mode choice Needed!")
+		os.Exit(0)
+	}else{
+		switch *mode {
+		case 1:
+			if *urlFileName==""{
+				fmt.Println("url FileName input Needed!")
+				os.Exit(0)
+			}
+		case 2:
+			if *portScanFileName=="" && *nmapXmlFileName==""{
+				fmt.Println("portScan filename or xml filename at least need one!")
+				os.Exit(0)
+			}
+		default:
+			fmt.Println("Wrong mode Number! PLZ choose 1 or 2!")
+			os.Exit(0)
+		}
+	}
+
+	//根据系统设置换行符
+	switch runtime.GOOS {
+	case "windows":
+		splitTool="\r\n"
+	case "linux":
+		splitTool="\n"
+	case "darwin":
+		splitTool="\r"
+	default:
+		splitTool="\r\n"
+	}
 }
 
 func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
-	//baseUrl:="https://blog.csdn.net/iamlihongwei/article/details/78854899"
-	//userAgent :="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
-	//client:=&http.Client{Transport: &http.Transport{
-	//	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	//}}
 	for url :=range baseUrl{
 		if url==""{
 			close(baseUrl)
@@ -81,7 +109,7 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 	}else {
 		server+="NULL_server!"
 	}
-	tempBody,_:=determineDecoding(res.Body)
+	tempBody,_:=common.DetermineDecoding(res.Body)
 	doc,err:=goquery.NewDocumentFromReader(tempBody)
 	if err!=nil{
 		return "Fail to parse response!",err
@@ -96,24 +124,14 @@ func oneWorker(client *http.Client,baseUrl string) (string,error) {
 func getTxtToList(fileName string) []string {
 	dataByte,err:=ioutil.ReadFile(fileName)
 	if err!=nil{
-		fmt.Println("fail to open file")
+		fmt.Println("fail to open file "+fileName)
 		os.Exit(0)
-	}
-	switch runtime.GOOS {
-	case "windows":
-		splitTool="\r\n"
-	case "linux":
-		splitTool="\n"
-	case "darwin":
-		splitTool="\r"
-	default:
-		splitTool="\r\n"
 	}
     data:=strings.TrimSpace(string(dataByte))
     return strings.Split(data,splitTool)
 }
 func main() {
-	flag.Parse()
+	//flag.Parse()
 	client:=&http.Client{Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}}             //复用client
@@ -129,14 +147,7 @@ func main() {
 	wg:=&sync.WaitGroup{}
 	target:=make(chan string)
 	result:=make(chan string)
-	if *fileName==""{
-		fmt.Println("FileName input Needed!")
-		os.Exit(0)
-	}
-	if *routineCountTotal<1{
-		fmt.Println("Thread must more than one!")
-		os.Exit(0)
-	}
+
 	fileResult,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for result")
@@ -165,7 +176,7 @@ func main() {
 	}
 
 	//分发任务
-	for _,baseUrl:=range getTxtToList(*fileName){
+	for _,baseUrl:=range getTxtToList(*urlFileName){
 		target <-baseUrl
 	}
 	target<-""   //工作结束
