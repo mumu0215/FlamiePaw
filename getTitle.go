@@ -5,21 +5,17 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"runtime"
 	"src/common"
-	"strconv"
 	"strings"
 	"sync"
 )
  //routineCountTotal 线程
 var(
-	userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
-
 	splitTool string           //换行符
 
 	mode=flag.Int("m",0,"mode choice,1:parse from url list,-uF Needed;" +
@@ -72,56 +68,7 @@ func init()  {
 	}
 }
 
-func getOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
-	for url :=range baseUrl{
-		if url==""{
-			close(baseUrl)             //关闭target channel
-		}else {
-			temp,err:=oneWorker(client,url)
-			if err!=nil{
-				fmt.Println(url+": "+temp)
-				//rep <-err.Error()
-			}else {
-				rep<-temp
-			}
-		}
-	}
-	group.Done()
-}
-func oneWorker(client *http.Client,baseUrl string) (string,error) {
-	req, err := http.NewRequest("GET", baseUrl, nil)
-	if err!=nil{
-		return  "Fail to create request!",err
-	}
-	req.Header.Add("User-Agent", userAgent)
-	req.Header.Add("Referer", baseUrl)
-	req.Header.Set("Accept-Encoding","")
-	res, err := client.Do(req)
-	if err!=nil{
-		return "Error occur at Sending Request!",err
-	}
-	defer res.Body.Close()
-	//fmt.Println(res.StatusCode)
-	//fmt.Println(res.Header["Server"][0])
-	server:=""
-	if len(res.Header["Server"])!=0{
-		server+=res.Header["Server"][0]
-	}else {
-		server+="NULL_server!"
-	}
-	tempBody,_:=common.DetermineDecoding(res.Body)
-	doc,err:=goquery.NewDocumentFromReader(tempBody)
-	if err!=nil{
-		return "Fail to parse response!",err
-	}
-	title:=strings.TrimSpace(doc.Find("title").First().Text())
-	if title==""{
-		title+="NULL_title!"
-	}
-	report:=baseUrl+"\t"+strconv.Itoa(res.StatusCode)+"\t"+server+"\t"+title
-	return report,nil
-}
-func getTxtToList(fileName string) []string {
+func getUrlFileToList(fileName string) []string {
 	dataByte,err:=ioutil.ReadFile(fileName)
 	if err!=nil{
 		fmt.Println("fail to open file "+fileName)
@@ -148,13 +95,13 @@ func main() {
 	target:=make(chan string)
 	result:=make(chan string)
 
-	fileResult,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	urlTitleFile,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for result")
 		os.Exit(0)
 	}
-	defer fileResult.Close()
-	buf:=bufio.NewWriter(fileResult)
+	defer urlTitleFile.Close()
+	buf:=bufio.NewWriter(urlTitleFile)
 	//接受结果，并处理判断信号
 	go func() {
 		for rep :=range result{
@@ -162,7 +109,6 @@ func main() {
 				close(result)
 			}else {
 				//文件处理传出结果
-				//fileResult.WriteString(rep+"\r\n")
 				tempList:=strings.Split(rep,"\t")
 				fmt.Fprintf(buf,"%-60s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
 				buf.Flush()
@@ -172,12 +118,15 @@ func main() {
 
 	for i:=0;i<*routineCountTotal;i++{
 		wg.Add(1)
-		go getOne(wg,client,target,result)
+		go common.GetOne(wg,client,target,result)
 	}
-
-	//分发任务
-	for _,baseUrl:=range getTxtToList(*urlFileName){
-		target <-baseUrl
+	//mode 1
+	//接受url文件
+	if *mode==1{
+		//分发任务
+		for _,baseUrl:=range getUrlFileToList(*urlFileName){
+			target <-baseUrl
+		}
 	}
 	target<-""   //工作分发结束
 	wg.Wait()
