@@ -41,17 +41,17 @@ Command:
 	go run getTitle.go -m 2 -t 15 -pF PortScanList1.txt
 ```
 御剑扫描结果导出格式如下：
-<img src="pic/yujian.png" style="zoom: 33%;" />
+<img src="pic/yujian.png" width="50%" height="50%"  />
 
    其他端口服务结果：
 
-<img src="pic/result.png" style="zoom: 33%;" />
+<img src="pic/result.png" width="50%" height="50%" />
 
 ##### 输出样例：
 
-<img src="pic/Snipaste_2021-01-19_14-34-39.png" style="zoom:50%;" />
+<img src="pic/Snipaste_2021-01-19_14-34-39.png" width="50%" height="50%" />
 
-<img src="pic/title.png" style="zoom: 33%;" />
+<img src="pic/title.png" width="50%" height="50%" />
 
 
 ### ToDo：
