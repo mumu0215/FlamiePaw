@@ -141,8 +141,8 @@ func main() {
 	result<-""   //发出结果中断信号
 	if *mode==2 && len(reportSlice)!=0{
 		fmt.Println("Found Information:")
-		fmt.Println("\tUrl:"+reportSlice[0]+" \tSSH:"+reportSlice[1]+" \tTelnet:"+reportSlice[2])
-		fmt.Println("\tFTP:"+reportSlice[3]+" \tAJP13:"+reportSlice[4]+" \tMysql:"+reportSlice[5])
+		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
+		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
 		fmt.Println("\tMssql:"+reportSlice[6])
 	}
 }

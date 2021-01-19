@@ -47,8 +47,9 @@ Command:
 
 <img src="pic/result.png" style="zoom: 33%;" />
 
-
 ##### 输出样例：
+
+<img src="pic/Snipaste_2021-01-19_14-34-39.png" style="zoom:50%;" />
 
 <img src="pic/title.png" style="zoom: 33%;" />
 
