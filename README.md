@@ -27,7 +27,7 @@ Command:
 
 
 ```
-### Example
+### Example:
 目前代码完成了**处理御剑扫描结果**和**直接处理url list**的部分
 
 ##### (1）直接处理url：
