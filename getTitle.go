@@ -122,13 +122,27 @@ func main() {
 	}
 	//mode 1
 	//接受url文件
+	var reportSlice []string
 	if *mode==1{
 		//分发任务
 		for _,baseUrl:=range getUrlFileToList(*urlFileName){
 			target <-baseUrl
 		}
+	}else {
+		//分发任务
+		tempSlice,reportTempSlice:=common.ParseYuJ(*portScanFileName,splitTool)
+		reportSlice=reportTempSlice
+		for _,singleUrl:=range tempSlice{
+			target<-singleUrl
+		}
 	}
 	target<-""   //工作分发结束
 	wg.Wait()
 	result<-""   //发出结果中断信号
+	if *mode==2 && len(reportSlice)!=0{
+		fmt.Println("Found Information:")
+		fmt.Println("\tUrl:"+reportSlice[0]+" \tSSH:"+reportSlice[1]+" \tTelnet:"+reportSlice[2])
+		fmt.Println("\tFTP:"+reportSlice[3]+" \tAJP13:"+reportSlice[4]+" \tMysql:"+reportSlice[5])
+		fmt.Println("\tMssql:"+reportSlice[6])
+	}
 }
