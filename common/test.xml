@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///D:/Nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.70 scan initiated Fri Jan 15 15:19:54 2021 as: nmap -sS -sS -Pn -p1-10000 -oX output 223.111.68.43 222.190.131.14 -->
+<nmaprun scanner="nmap" args="nmap -sS -sS -Pn -p1-10000 -oX output 223.111.68.43 222.190.131.14" start="1610695194" startstr="Fri Jan 15 15:19:54 2021" version="7.70" xmloutputversion="1.04">
+<scaninfo type="syn" protocol="tcp" numservices="10000" services="1-10000"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1610695204" endtime="1610695351"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="223.111.68.43" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="filtered" count="9993">
+<extrareasons reason="no-responses" count="9993"/>
+</extraports>
+<port protocol="tcp" portid="7080"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="empowerid" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7091"><state state="open" reason="syn-ack" reason_ttl="53"/></port>
+<port protocol="tcp" portid="8001"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="vcom-tunnel" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8088"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="radan-http" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8888"><state state="closed" reason="reset" reason_ttl="52"/><service name="sun-answerbook" method="table" conf="3"/></port>
+<port protocol="tcp" portid="9000"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="cslistener" method="table" conf="3"/></port>
+<port protocol="tcp" portid="9080"><state state="closed" reason="reset" reason_ttl="53"/><service name="glrpc" method="table" conf="3"/></port>
+</ports>
+<times srtt="18675" rttvar="4322" to="100000"/>
+</host>
+<host starttime="1610695204" endtime="1610695351"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="222.190.131.14" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="9958">
+<extrareasons reason="resets" count="9958"/>
+</extraports>
+<port protocol="tcp" portid="80"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http" method="table" conf="3"/></port>
+<port protocol="tcp" portid="85"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="mit-ml-dev" method="table" conf="3"/></port>
+<port protocol="tcp" portid="139"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="netbios-ssn" method="table" conf="3"/></port>
+<port protocol="tcp" portid="161"><state state="open" reason="syn-ack" reason_ttl="57"/><service name="snmp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="443"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="https" method="table" conf="3"/></port>
+<port protocol="tcp" portid="445"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="microsoft-ds" method="table" conf="3"/></port>
+<port protocol="tcp" portid="554"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="rtsp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="557"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="openvms-sysipc" method="table" conf="3"/></port>
+<port protocol="tcp" portid="559"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="teedtap" method="table" conf="3"/></port>
+<port protocol="tcp" portid="593"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http-rpc-epmap" method="table" conf="3"/></port>
+<port protocol="tcp" portid="655"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="tinc" method="table" conf="3"/></port>
+<port protocol="tcp" portid="707"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="borland-dsj" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1000"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="cadlock" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1443"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="ies-lm" method="table" conf="3"/></port>
+<port protocol="tcp" portid="2601"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="zebra" method="table" conf="3"/></port>
+<port protocol="tcp" portid="2602"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ripd" method="table" conf="3"/></port>
+<port protocol="tcp" portid="2604"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ospfd" method="table" conf="3"/></port>
+<port protocol="tcp" portid="2606"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="netmon" method="table" conf="3"/></port>
+<port protocol="tcp" portid="4431"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="wspipe" method="table" conf="3"/></port>
+<port protocol="tcp" portid="4444"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="krb524" method="table" conf="3"/></port>
+<port protocol="tcp" portid="5000"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="upnp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="5554"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="sgi-esphttp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6009"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="X11:9" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6014"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="x11" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7002"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="afs3-prserver" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7087"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
+<port protocol="tcp" portid="7099"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="lazy-ptop" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7302"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="swx" method="table" conf="3"/></port>
+<port protocol="tcp" portid="7660"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
+<port protocol="tcp" portid="8000"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="http-alt" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8010"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="xmpp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8011"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="unknown" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8020"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="intu-ec-svcdisc" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8029"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="unknown" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8080"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http-proxy" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8081"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="blackice-icecap" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8083"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="us-srv" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8088"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="radan-http" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8603"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
+<port protocol="tcp" portid="9092"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="XmlIpcRegSvc" method="table" conf="3"/></port>
+<port protocol="tcp" portid="9998"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="distinct32" method="table" conf="3"/></port>
+<port protocol="tcp" portid="9999"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="abyss" method="table" conf="3"/></port>
+</ports>
+<times srtt="8229" rttvar="943" to="100000"/>
+</host>
+<runstats><finished time="1610695438" timestr="Fri Jan 15 15:23:58 2021" elapsed="243.35" summary="Nmap done at Fri Jan 15 15:23:58 2021; 2 IP addresses (2 hosts up) scanned in 243.35 seconds" exit="success"/><hosts up="2" down="0" total="2"/>
+</runstats>
+</nmaprun>

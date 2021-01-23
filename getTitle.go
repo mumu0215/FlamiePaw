@@ -45,8 +45,8 @@ func init()  {
 				os.Exit(0)
 			}
 		case 2:
-			if *portScanFileName=="" && *nmapXmlFileName==""{
-				fmt.Println("portScan filename or xml filename at least need one!")
+			if (*portScanFileName=="" && *nmapXmlFileName=="") || (*portScanFileName!="" && *nmapXmlFileName!=""){
+				fmt.Println("portScan filename or xml filename need one!")
 				os.Exit(0)
 			}
 		default:
@@ -128,9 +128,23 @@ func main() {
 		for _,baseUrl:=range getUrlFileToList(*urlFileName){
 			target <-baseUrl
 		}
-	}else {
+	}else if *mode==2 && *portScanFileName!=""{ //mode 2 御剑扫描结果输入
 		//分发任务
-		tempSlice,reportTempSlice:=common.ParseYuJ(*portScanFileName,splitTool)
+		tempSlice,reportTempSlice,err:=common.ParseYuJ(*portScanFileName,splitTool)
+		if err!=nil{
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		reportSlice=reportTempSlice
+		for _,singleUrl:=range tempSlice{
+			target<-singleUrl
+		}
+	}else if *mode==2 && *nmapXmlFileName!=""{ //mode 2 nmap扫描结果输入
+		tempSlice,reportTempSlice,err:=common.ParseXml(*nmapXmlFileName,splitTool)
+		if err!=nil{
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		reportSlice=reportTempSlice
 		for _,singleUrl:=range tempSlice{
 			target<-singleUrl
@@ -139,10 +153,13 @@ func main() {
 	target<-""   //工作分发结束
 	wg.Wait()
 	result<-""   //发出结果中断信号
-	if *mode==2 && len(reportSlice)!=0{
+	if *mode==2 && len(reportSlice)!=0 && *portScanFileName!=""{
 		fmt.Println("Found Information:")
 		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
 		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
-		fmt.Println("\tMssql:"+reportSlice[6])
+		fmt.Println("\tMssql:"+reportSlice[6]+"    UnKnow:"+reportSlice[7])
+	}else if *mode==2 && len(reportSlice)!=0 && *nmapXmlFileName!=""{
+		fmt.Println("Found Information:")
+		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    UnKnow:"+reportSlice[2])
 	}
 }
