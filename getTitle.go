@@ -13,6 +13,7 @@ import (
 	"src/common"
 	"strings"
 	"sync"
+	"time"
 )
  //routineCountTotal 线程
 var(
@@ -25,6 +26,7 @@ var(
 	urlFileName=flag.String("uF","","url file name")
 	portScanFileName=flag.String("pF","","yujian port scan file")
 	nmapXmlFileName=flag.String("xF","","nmap output xmlFileName")
+	timeOut=flag.Int("T",2,"request timeout seconds")
 )
 
 func init()  {
@@ -54,6 +56,10 @@ func init()  {
 			os.Exit(0)
 		}
 	}
+	if *timeOut<1{
+		fmt.Println("Set timeout more than 1 second")
+		os.Exit(0)
+	}
 
 	//根据系统设置换行符
 	switch runtime.GOOS {
@@ -79,14 +85,20 @@ func getUrlFileToList(fileName string) []string {
 }
 func main() {
 	//flag.Parse()
-	client:=&http.Client{Transport: &http.Transport{
+	client:=&http.Client{
+		Timeout:time.Duration(*timeOut)*time.Second,
+		Transport: &http.Transport{
+		//参数未知影响，目前不使用
+		//TLSHandshakeTimeout: time.Duration(timeout) * time.Second,
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}}             //复用client
+	},}             //复用client
 	if *myProxy!=""{                   //设置代理
 		proxy := func(_ *http.Request) (*url.URL, error) {
 			return url.Parse(strings.TrimSpace(*myProxy))
 		}
-		client=&http.Client{Transport:&http.Transport{
+		client=&http.Client{
+			Timeout:time.Duration(*timeOut)*time.Second,
+			Transport:&http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 			Proxy:                  proxy,
 		}}

@@ -70,55 +70,55 @@ func doWork(input []string,sp string) (string,[]string,error) {
 			countUnknow+=1
 		}
 	}
-	err:=os.MkdirAll("./result",os.ModePerm)
+	err:=os.MkdirAll("./Result",os.ModePerm)
 	if err!=nil{
 		//fmt.Println("Fail to Create folder")
 		//os.Exit(1)
 		return strings.TrimSpace(url),[]string{},err
 	}
-	fileUrl,err:=os.OpenFile("./result/url.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileUrl,err:=os.OpenFile("./Result/url.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileUrl.WriteString(url)
 	fileUrl.Close()
 
-	fileAjp13,err:=os.OpenFile("./result/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileAjp13,err:=os.OpenFile("./Result/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileAjp13.WriteString(ajp13)
 	fileAjp13.Close()
 
-	fileTelnet,err:=os.OpenFile("./result/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileTelnet,err:=os.OpenFile("./Result/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileTelnet.WriteString(telnet)
 	fileTelnet.Close()
 
-	fileFtp,err:=os.OpenFile("./result/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileFtp,err:=os.OpenFile("./Result/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileFtp.WriteString(ftp)
 	fileFtp.Close()
 
-	fileSSH,err:=os.OpenFile("./result/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileSSH,err:=os.OpenFile("./Result/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileSSH.WriteString(ssh)
 	fileSSH.Close()
 
-	fileMysql,err:=os.OpenFile("./result/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileMysql,err:=os.OpenFile("./Result/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileMysql.WriteString(mysql)
 	fileMysql.Close()
 
-	fileMssql,err:=os.OpenFile("./result/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileMssql,err:=os.OpenFile("./Result/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
