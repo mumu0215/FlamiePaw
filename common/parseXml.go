@@ -79,12 +79,14 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	fileUrl.WriteString(url)
 	fileUrl.Close()
 
-	fileSsh,err:=os.OpenFile("./XmlResult/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countSsh>0{
+		fileSsh,err:=os.OpenFile("./XmlResult/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileSsh.WriteString(ssh)
+		fileSsh.Close()
 	}
-	fileSsh.WriteString(ssh)
-	fileSsh.Close()
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(unknown)},nil
 }

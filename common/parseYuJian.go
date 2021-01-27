@@ -76,6 +76,7 @@ func doWork(input []string,sp string) (string,[]string,error) {
 		//os.Exit(1)
 		return strings.TrimSpace(url),[]string{},err
 	}
+
 	fileUrl,err:=os.OpenFile("./Result/url.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
@@ -83,47 +84,59 @@ func doWork(input []string,sp string) (string,[]string,error) {
 	fileUrl.WriteString(url)
 	fileUrl.Close()
 
-	fileAjp13,err:=os.OpenFile("./Result/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countAjp13>0{
+		fileAjp13,err:=os.OpenFile("./Result/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileAjp13.WriteString(ajp13)
+		fileAjp13.Close()
 	}
-	fileAjp13.WriteString(ajp13)
-	fileAjp13.Close()
 
-	fileTelnet,err:=os.OpenFile("./Result/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countTelnet>0{
+		fileTelnet,err:=os.OpenFile("./Result/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileTelnet.WriteString(telnet)
+		fileTelnet.Close()
 	}
-	fileTelnet.WriteString(telnet)
-	fileTelnet.Close()
 
-	fileFtp,err:=os.OpenFile("./Result/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countFtp>0{
+		fileFtp,err:=os.OpenFile("./Result/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileFtp.WriteString(ftp)
+		fileFtp.Close()
 	}
-	fileFtp.WriteString(ftp)
-	fileFtp.Close()
 
-	fileSSH,err:=os.OpenFile("./Result/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countSsh>0{
+		fileSSH,err:=os.OpenFile("./Result/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileSSH.WriteString(ssh)
+		fileSSH.Close()
 	}
-	fileSSH.WriteString(ssh)
-	fileSSH.Close()
 
-	fileMysql,err:=os.OpenFile("./Result/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countMysql>0{
+		fileMysql,err:=os.OpenFile("./Result/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileMysql.WriteString(mysql)
+		fileMysql.Close()
 	}
-	fileMysql.WriteString(mysql)
-	fileMysql.Close()
 
-	fileMssql,err:=os.OpenFile("./Result/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-	if err!=nil{
-		return strings.TrimSpace(url),[]string{},err
+	if countMssql>0{
+		fileMssql,err:=os.OpenFile("./Result/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileMssql.WriteString(mssql)
+		fileMssql.Close()
 	}
-	fileMssql.WriteString(mssql)
-	fileMssql.Close()
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),
 		strconv.Itoa(countTelnet),strconv.Itoa(countFtp),strconv.Itoa(countAjp13),
