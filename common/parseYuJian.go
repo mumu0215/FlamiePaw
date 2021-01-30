@@ -16,7 +16,11 @@ func doWork(input []string,sp string) (string,[]string,error) {
 	mysql:=""
 	mssql:=""
 	ajp13:=""
+	redis:=""
+	mongodb:=""
 	//计数
+	countMongoDb:=0
+	countRedis:=0
 	countUrl:=0
 	countSsh:=0
 	countTelnet:=0
@@ -65,6 +69,12 @@ func doWork(input []string,sp string) (string,[]string,error) {
 		case "ajp13":
 			ajp13+=sList[1]+sp
 			countAjp13+=1
+		case "redis":
+			redis+=sList[1]+sp
+			countRedis+=1
+		case "mongodb":
+			mongodb+=sList[1]+sp
+			countMongoDb+=1
 		default:
 			url+="http://"+sList[1]+sp //未分类送去web检测
 			countUnknow+=1
@@ -92,7 +102,22 @@ func doWork(input []string,sp string) (string,[]string,error) {
 		fileAjp13.WriteString(ajp13)
 		fileAjp13.Close()
 	}
-
+	if countMongoDb>0{
+		fileMongoDb,err:=os.OpenFile("./Result/mongodb.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileMongoDb.WriteString(mongodb)
+		fileMongoDb.Close()
+	}
+	if countRedis>0{
+		fileRedis,err:=os.OpenFile("./Result/redis.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileRedis.WriteString(redis)
+		fileRedis.Close()
+	}
 	if countTelnet>0{
 		fileTelnet,err:=os.OpenFile("./Result/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 		if err!=nil{

@@ -30,6 +30,13 @@ Command:
         request timeout seconds (default 2)
 ```
 ### Example:
+
+##### 目前支持分捡的协议：
+
+|  SSH  | Telnet |  Ftp  | redis |
+| :---: | :----: | :---: | :---: |
+| MySQL | MSSQL  | ajp13 |       |
+
 ##### (1）直接处理url：
    结果保存在urlTitle.txt中
 ```
@@ -64,8 +71,6 @@ Command:
 
  输出结果保存在urlTitle.txt中
 
-​	由于nmap的service比较精确，字符串难以匹配，目前只做了ssh服务资产筛选，后续会酌情添加；
-
 **输出样例：**
 
 <img src="pic/Snipaste_2021-01-26_00-32-54.png" width="50%" height="50%" />
@@ -77,7 +82,6 @@ Command:
 - [x] 文本处理区别不同系统换行符
 - [x] 添加访问代理
 - [x] 链接端口扫描结果处理的工具实现整合
-- [ ] golang http.client参数中重定向函数的细化
 
 
 

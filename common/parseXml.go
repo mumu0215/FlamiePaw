@@ -23,21 +23,23 @@ func ParseXml(xmlFileName string,sp string) ([]string,[]string,error){
 func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	url:=""
 	ssh:=""
-	//telnet:=""
-	//ftp:=""
-	//mysql:=""
-	//mssql:=""
-	//ajp13:=""
+	redis:=""
+	telnet:=""
+	ftp:=""
+	mysql:=""
+	mssql:=""
+	ajp13:=""
 
 	//计数
+	countRedis:=0
 	countUrl:=0
 	unknown:=0
 	countSsh:=0
-	//countTelnet:=0
-	//countFtp:=0
-	//countMysql:=0
-	//countMssql:=0
-	//countAjp13:=0
+	countTelnet:=0
+	countFtp:=0
+	countMysql:=0
+	countMssql:=0
+	countAjp13:=0
 	hostSlice:=r.Host
 	for _,host:=range hostSlice{
 		ipAddr:=host.Address.Addr
@@ -56,11 +58,24 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 				case "ssh":
 					ssh+=ipAddr+":"+portID+sp
 					countSsh+=1
-				//case "telnet":
-				//case "ftp":
-				//case "mysql":
-				//case "mssql":
-				//case "ajp":
+				case "redis":
+					redis+=ipAddr+":"+sp
+					countRedis+=1
+				case "telnet":
+					telnet+=ipAddr+":"+sp
+					countTelnet+=1
+				case "ftp":
+					ftp+=ipAddr+":"+sp
+					countFtp+=1
+				case "mysql":
+					mysql+=ipAddr+":"+sp
+					countMysql+=1
+				case "ms-sql-s":
+					mssql+=ipAddr+":"+sp
+					countMssql+=1
+				case "ajp13":
+					ajp13+=ipAddr+":"+sp
+					countAjp13+=1
 				default:      //未分类全部送去web检测
 					url+="http://"+ipAddr+":"+portID+sp
 					unknown+=1
@@ -79,6 +94,47 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	fileUrl.WriteString(url)
 	fileUrl.Close()
 
+	if countRedis>0{
+		fileRedis,err:=os.OpenFile("./XmlResult/redis.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileRedis.WriteString(redis)
+		fileRedis.Close()
+	}
+	if countMssql>0{
+		fileMssql,err:=os.OpenFile("./XmlResult/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileMssql.WriteString(mssql)
+		fileMssql.Close()
+	}
+	if countAjp13>0{
+		fileAjp13,err:=os.OpenFile("./XmlResult/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileAjp13.WriteString(ajp13)
+		fileAjp13.Close()
+	}
+	if countFtp>0{
+		fileFtp,err:=os.OpenFile("./XmlResult/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileFtp.WriteString(ftp)
+		fileFtp.Close()
+	}
+	if countTelnet>0{
+		fileTelnet,err:=os.OpenFile("./XmlResult/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileTelnet.WriteString(telnet)
+		fileTelnet.Close()
+	}
+
 	if countSsh>0{
 		fileSsh,err:=os.OpenFile("./XmlResult/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 		if err!=nil{
@@ -86,6 +142,14 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 		}
 		fileSsh.WriteString(ssh)
 		fileSsh.Close()
+	}
+	if countMysql>0{
+		fileMysql,err:=os.OpenFile("./XmlResult/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+		if err!=nil{
+			return strings.TrimSpace(url),[]string{},err
+		}
+		fileMysql.WriteString(mysql)
+		fileMysql.Close()
 	}
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(unknown)},nil
