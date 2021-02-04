@@ -169,9 +169,12 @@ func main() {
 		fmt.Println("Found Information:")
 		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
 		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
-		fmt.Println("\tMssql:"+reportSlice[6]+"    UnKnow:"+reportSlice[7])
+		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    MongoDB:"+reportSlice[8])
+		fmt.Println("\tUnKnow:"+reportSlice[9])
 	}else if *mode==2 && len(reportSlice)!=0 && *nmapXmlFileName!=""{
 		fmt.Println("Found Information:")
-		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    UnKnow:"+reportSlice[2])
+		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
+		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
+		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    UnKnow:"+reportSlice[8])
 	}
 }

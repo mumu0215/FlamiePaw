@@ -152,7 +152,9 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 		fileMysql.Close()
 	}
 
-	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(unknown)},nil
+	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(countTelnet),
+		strconv.Itoa(countFtp),strconv.Itoa(countAjp13),strconv.Itoa(countMysql),strconv.Itoa(countMssql),
+		strconv.Itoa(countRedis),strconv.Itoa(unknown)},nil
 }
 
 

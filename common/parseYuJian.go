@@ -165,7 +165,8 @@ func doWork(input []string,sp string) (string,[]string,error) {
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),
 		strconv.Itoa(countTelnet),strconv.Itoa(countFtp),strconv.Itoa(countAjp13),
-		strconv.Itoa(countMysql),strconv.Itoa(countMssql),strconv.Itoa(countUnknow)},nil
+		strconv.Itoa(countMysql),strconv.Itoa(countMssql),strconv.Itoa(countRedis),
+		strconv.Itoa(countMongoDb),strconv.Itoa(countUnknow)},nil
 }
 func ParseYuJ(portScanFile string,sp string) (a []string,b []string,err1 error) {
 	dataByte,err:=ioutil.ReadFile(portScanFile)
