@@ -110,10 +110,17 @@ func main() {
 	urlTitleFile,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for result")
-		os.Exit(0)
+		os.Exit(1)
 	}
 	defer urlTitleFile.Close()
+	webToScan,err:=os.OpenFile("urlToScan.txt",os.O_TRUNC|os.O_RDWR|os.O_CREATE,0666)
+	if err!=nil{
+		fmt.Println("Fail to open file for scan")
+		os.Exit(1)
+	}
+	defer webToScan.Close()
 	buf:=bufio.NewWriter(urlTitleFile)
+	scanBuf:=bufio.NewWriter(webToScan)
 	//接受结果，并处理判断信号
 	go func() {
 		for rep :=range result{
@@ -121,8 +128,9 @@ func main() {
 				close(result)
 			}else {
 				//文件处理传出结果
+				common.GetWeb200(rep,scanBuf,splitTool)
 				tempList:=strings.Split(rep,"\t")
-				fmt.Fprintf(buf,"%-60s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
+				fmt.Fprintf(buf,"%-40s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
 				buf.Flush()
 			}
 		}
