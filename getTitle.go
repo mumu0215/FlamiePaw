@@ -27,6 +27,11 @@ var(
 	portScanFileName=flag.String("pF","","yujian port scan file")
 	nmapXmlFileName=flag.String("xF","","nmap output xmlFileName")
 	timeOut=flag.Int("T",2,"request timeout seconds")
+	Banner=`
+ ____  __      __    __  __  ____  ____  ____   __    _    _ 
+( ___)(  )    /__\  (  \/  )(_  _)( ___)(  _ \ /__\  ( \/\/ )
+ )__)  )(__  /(__)\  )    (  _)(_  )__)  )___//(__)\  )    ( 
+(__)  (____)(__)(__)(_/\/\_)(____)(____)(__) (__)(__)(__/\__)`
 )
 
 func init()  {
@@ -85,6 +90,7 @@ func getUrlFileToList(fileName string) []string {
 }
 func main() {
 	//flag.Parse()
+	fmt.Println(Banner)
 	client:=&http.Client{
 		Timeout:time.Duration(*timeOut)*time.Second,
 		Transport: &http.Transport{
@@ -128,8 +134,8 @@ func main() {
 				close(result)
 			}else {
 				//文件处理传出结果
-				common.GetWeb200(rep,scanBuf,splitTool)
 				tempList:=strings.Split(rep,"\t")
+				common.GetWeb200(tempList,scanBuf,splitTool)
 				fmt.Fprintf(buf,"%-40s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
 				buf.Flush()
 			}
