@@ -9,7 +9,7 @@ import (
 	//"golang.org/x/text/transform"
 )
 
-func DetermineDecoding(rep io.Reader) (io.Reader,error) {                                 //处理网页编码问题
+func DetermineDecoding(rep io.Reader) (io.Reader,error) {     //处理网页编码问题
 	OldReader := bufio.NewReader(rep)
 	bytes, err := OldReader.Peek(1024)
 	if err != nil {

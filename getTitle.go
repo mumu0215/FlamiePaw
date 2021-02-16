@@ -11,6 +11,7 @@ import (
 	"os"
 	"runtime"
 	"src/common"
+	"src/crawler"
 	"strings"
 	"sync"
 	"time"
@@ -112,6 +113,9 @@ func main() {
 	wg:=&sync.WaitGroup{}
 	target:=make(chan string)
 	result:=make(chan string)
+	wgScan:=&sync.WaitGroup{}
+	targetScan:=make(chan string)
+	resultScan:=make(chan []string)
 
 	urlTitleFile,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
@@ -127,6 +131,7 @@ func main() {
 	defer webToScan.Close()
 	buf:=bufio.NewWriter(urlTitleFile)
 	scanBuf:=bufio.NewWriter(webToScan)
+	var scanUrlSlice []string
 	//接受结果，并处理判断信号
 	go func() {
 		for rep :=range result{
@@ -135,16 +140,36 @@ func main() {
 			}else {
 				//文件处理传出结果
 				tempList:=strings.Split(rep,"\t")
-				common.GetWeb200(tempList,scanBuf,splitTool)
+				temp:=common.GetWeb200(tempList,scanBuf,splitTool)
+				scanUrlSlice=append(scanUrlSlice,temp)         //挑选扫描网址
 				fmt.Fprintf(buf,"%-40s\t%s\t%-20s\t%s"+splitTool,tempList[0],tempList[1],tempList[2],tempList[3])
 				buf.Flush()
 			}
 		}
 	}()
-
+	go func() {               //爬虫协程
+		for temp:=range resultScan{
+			if temp[0]=="stop"{
+				close(resultScan)
+			}else {
+				//处理子域名
+				//fmt.Println(temp)
+			}
+		}
+	}()
+	//根据线程分发任务
 	for i:=0;i<*routineCountTotal;i++{
 		wg.Add(1)
 		go common.GetOne(wg,client,target,result)
+	}
+	//根据crawler线程分发任务
+	crawlerSetting,err:=crawler.ParseCrawlerConfig("config.yaml")
+	if err!=nil{
+		panic(err)
+	}
+	for i:=0;i<crawlerSetting.MyCrawler.CrawlerThread;i++{
+		wgScan.Add(1)
+		go crawler.RunCrawler(wgScan,crawlerSetting,targetScan,resultScan)
 	}
 	//mode 1
 	//接受url文件
@@ -179,6 +204,11 @@ func main() {
 	target<-""   //工作分发结束
 	wg.Wait()
 	result<-""   //发出结果中断信号
+	//爬虫任务分发
+	for _,scanUrl:=range scanUrlSlice{
+		targetScan<-scanUrl
+	}
+
 	if *mode==2 && len(reportSlice)!=0 && *portScanFileName!=""{
 		fmt.Println("Found Information:")
 		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
@@ -191,4 +221,8 @@ func main() {
 		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
 		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    UnKnow:"+reportSlice[8])
 	}
+	//爬虫协程逻辑结束
+	targetScan<-""
+	wgScan.Wait()
+	resultScan<-[]string{"stop"}
 }
