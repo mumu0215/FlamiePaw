@@ -134,7 +134,8 @@ func RunCrawler(group *sync.WaitGroup,myConfig CrawlerConfig,baseUrl chan string
 		}else {
 			subDomains:=getOutputContinually("cmd","/C",".\\crawlergo.exe","-c", myConfig.MyChrome.Path,
 				"-t", myConfig.MyChrome.MaxTapCount,"-f", myConfig.MyCrawler.FilterMode,"--fuzz-path",
-				"--output-mode","json","--custom-headers",getHeader(),url)
+				"--output-mode","json","--custom-headers",getHeader(),"--push-to-proxy",myConfig.MyCrawler.Proxy,
+				"--push-pool-max",myConfig.MyCrawler.PushToPoolMax,url)
 			domains <-subDomains
 		}
 	}

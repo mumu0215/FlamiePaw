@@ -2,7 +2,7 @@ Chrome:
   Path: C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
   MaxTapCount: 5
 Crawler:
-  CrawlerThread: 5
+  CrawlerThread: 8
   FilterMode: smart
   Proxy: http://127.0.0.1:8888/
   PushToPoolMax: 10
