@@ -28,6 +28,7 @@ var(
 	portScanFileName=flag.String("pF","","yujian port scan file")
 	nmapXmlFileName=flag.String("xF","","nmap output xmlFileName")
 	timeOut=flag.Int("T",2,"request timeout seconds")
+	crawlerFlag=flag.Bool("crawler",false,"run crawler at last")
 	Banner=`
  ____  __      __    __  __  ____  ____  ____   __    _    _ 
 ( ___)(  )    /__\  (  \/  )(_  _)( ___)(  _ \ /__\  ( \/\/ )
@@ -147,30 +148,33 @@ func main() {
 			}
 		}
 	}()
-	go func() {               //爬虫协程
-		for temp:=range resultScan{
-			if temp[0]=="stop"{
-				close(resultScan)
-			}else {
-				//处理子域名
-				//fmt.Println(temp)
-			}
-		}
-	}()
 	//根据线程分发任务
 	for i:=0;i<*routineCountTotal;i++{
 		wg.Add(1)
 		go common.GetOne(wg,client,target,result)
 	}
-	//根据crawler线程分发任务
-	crawlerSetting,err:=crawler.ParseCrawlerConfig("config.yaml")
-	if err!=nil{
-		panic(err)
+	if *crawlerFlag==true{
+		go func() {               //爬虫协程
+			for temp:=range resultScan{
+				if temp[0]=="stop"{
+					close(resultScan)
+				}else {
+					//处理子域名
+					//fmt.Println(temp)
+				}
+			}
+		}()
+		//根据crawler线程分发任务
+		crawlerSetting,err:=crawler.ParseCrawlerConfig("config.yaml")
+		if err!=nil{
+			panic(err)
+		}
+		for i:=0;i<crawlerSetting.MyCrawler.CrawlerThread;i++{
+			wgScan.Add(1)
+			go crawler.RunCrawler(wgScan,crawlerSetting,targetScan,resultScan)
+		}
 	}
-	for i:=0;i<crawlerSetting.MyCrawler.CrawlerThread;i++{
-		wgScan.Add(1)
-		go crawler.RunCrawler(wgScan,crawlerSetting,targetScan,resultScan)
-	}
+
 	//mode 1
 	//接受url文件
 	var reportSlice []string
@@ -204,10 +208,6 @@ func main() {
 	target<-""   //工作分发结束
 	wg.Wait()
 	result<-""   //发出结果中断信号
-	//爬虫任务分发
-	for _,scanUrl:=range scanUrlSlice{
-		targetScan<-scanUrl
-	}
 
 	if *mode==2 && len(reportSlice)!=0 && *portScanFileName!=""{
 		fmt.Println("Found Information:")
@@ -221,8 +221,15 @@ func main() {
 		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
 		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    UnKnow:"+reportSlice[8])
 	}
-	//爬虫协程逻辑结束
-	targetScan<-""
-	wgScan.Wait()
-	resultScan<-[]string{"stop"}
+	if *crawlerFlag==true{
+		fmt.Println("Crawler Running...")
+		//爬虫任务分发
+		for _,scanUrl:=range scanUrlSlice{
+			targetScan<-scanUrl
+		}
+		//爬虫协程逻辑结束
+		targetScan<-""
+		wgScan.Wait()
+		resultScan<-[]string{"stop"}
+	}
 }
