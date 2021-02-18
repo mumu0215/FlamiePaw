@@ -2,11 +2,9 @@
 
 ### introduction：
 
- 一个旨在渗透初期批量处理资产的工具
+ 一个旨在渗透初期批量处理资产端扫结果的工具
 
-目前实现了处理从nmap或御剑端口扫描器导出结果，初步信息筛检，探测开放web服务并获取title的功能。
-
-最后目标是整合从端口扫描到xray扫描的一键化渗透工具。
+目前实现了处理从nmap或御剑端口扫描器导出结果，初步信息筛检，探测开放web服务并获取title，将资产发送至crawlergo爬虫可配合xray进行web漏扫等功能。
 
 
 ### Usage:
@@ -16,39 +14,33 @@ Command:
         mode choice:
         	1:parse from url list,-uF Needed;
         	2:parse from port scan file,-pF or -xF Needed
-  -t int
-        thread (default 15)
-  -p string
-        proxy setting
   -uF string
         url file name
   -pF string
         yujian port scan file
   -xF string
         nmap output xmlFileName
-  -T int
-        request timeout seconds (default 2)
+  -crawler bool
+        run crawler at last
 ```
 ### Example:
 
 ##### 目前支持分捡的协议：
 
-|  SSH  | Telnet |  Ftp  | redis |
-| :---: | :----: | :---: | :---: |
-| MySQL | MSSQL  | ajp13 |       |
+SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、(MongoDB)
 
 ##### (1）直接处理url：
-   结果保存在urlTitle.txt中
+   web探测结果保存在.\Result\urlTitle.txt中
 ```
-	go run getTitle.go -m 1 -t 15 -uF url1.txt
+	go run getTitle.go -m 1 -uF url1.txt
 ```
 ##### (2）处理御剑导出结果：
-   结果保存在urlTitle.txt中，其他端口服务结果保存在./Result目录下
+   web探测结果保存在.\Result\urlTitle.txt中，其他端口服务结果保存在.\Result\YuJianService.txt，json输出.\Result\YuJian.json
 
 ​	目前只挑选了一部分服务，例如mysql等；
 
 ```
-	go run getTitle.go -m 2 -t 15 -pF PortScanList1.txt
+	go run getTitle.go -m 2 -pF PortScanList1.txt
 ```
 御剑扫描结果导出格式如下：
 
@@ -66,10 +58,10 @@ Command:
 
 ##### （3）处理Nmap导出XML文件结果：
 ```
-	go run getTitle.go -m 2 -t 15 -xF output.xml
+	go run getTitle.go -m 2 -xF output.xml
 ```
 
- 输出结果保存在urlTitle.txt中
+ web探测结果保存在.\Result\urlTitle.txt中，其他端口服务结果保存在.\Result\NmapService.txt，json输出.\Result\Nmap.json
 
 **输出样例：**
 
