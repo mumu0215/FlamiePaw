@@ -1,80 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE nmaprun>
 <?xml-stylesheet href="file:///D:/Nmap/nmap.xsl" type="text/xsl"?>
-<!-- Nmap 7.70 scan initiated Fri Jan 15 15:19:54 2021 as: nmap -sS -sS -Pn -p1-10000 -oX output 223.111.68.43 222.190.131.14 -->
-<nmaprun scanner="nmap" args="nmap -sS -sS -Pn -p1-10000 -oX output 223.111.68.43 222.190.131.14" start="1610695194" startstr="Fri Jan 15 15:19:54 2021" version="7.70" xmloutputversion="1.04">
-<scaninfo type="syn" protocol="tcp" numservices="10000" services="1-10000"/>
+<!-- Nmap 7.70 scan initiated Thu Feb 18 20:37:19 2021 as: D:\\Nmap\\nmap.exe -sS -Pn -sV -p 22,21,1433,8009,23,6379 -iL .\\target.txt -oX .\\output.xml -->
+<nmaprun scanner="nmap" args="D:\\Nmap\\nmap.exe -sS -Pn -sV -p 22,21,1433,8009,23,6379 -iL .\\target.txt -oX .\\output.xml" start="1613651839" startstr="Thu Feb 18 20:37:19 2021" version="7.70" xmloutputversion="1.04">
+<scaninfo type="syn" protocol="tcp" numservices="6" services="21-23,1433,6379,8009"/>
 <verbose level="0"/>
 <debugging level="0"/>
-<host starttime="1610695204" endtime="1610695351"><status state="up" reason="user-set" reason_ttl="0"/>
-<address addr="223.111.68.43" addrtype="ipv4"/>
+<taskprogress task="Service scan" time="1613651893" percent="100.00" remaining="1" etc="1613651893"/>
+<host starttime="1613651850" endtime="1613651977"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="182.254.227.33" addrtype="ipv4"/>
 <hostnames>
 </hostnames>
-<ports><extraports state="filtered" count="9993">
-<extrareasons reason="no-responses" count="9993"/>
-</extraports>
-<port protocol="tcp" portid="7080"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="empowerid" method="table" conf="3"/></port>
-<port protocol="tcp" portid="7091"><state state="open" reason="syn-ack" reason_ttl="53"/></port>
-<port protocol="tcp" portid="8001"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="vcom-tunnel" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8088"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="radan-http" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8888"><state state="closed" reason="reset" reason_ttl="52"/><service name="sun-answerbook" method="table" conf="3"/></port>
-<port protocol="tcp" portid="9000"><state state="open" reason="syn-ack" reason_ttl="53"/><service name="cslistener" method="table" conf="3"/></port>
-<port protocol="tcp" portid="9080"><state state="closed" reason="reset" reason_ttl="53"/><service name="glrpc" method="table" conf="3"/></port>
+<ports><port protocol="tcp" portid="21"><state state="closed" reason="reset" reason_ttl="116"/><service name="ftp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="22"><state state="closed" reason="reset" reason_ttl="116"/><service name="ssh" method="table" conf="3"/></port>
+<port protocol="tcp" portid="23"><state state="closed" reason="reset" reason_ttl="116"/><service name="telnet" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="closed" reason="reset" reason_ttl="116"/><service name="ms-sql-s" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6379"><state state="open" reason="syn-ack" reason_ttl="116"/><service name="redis" product="Redis key-value store" version="3.0.503" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8009"><state state="closed" reason="reset" reason_ttl="116"/><service name="ajp13" method="table" conf="3"/></port>
 </ports>
-<times srtt="18675" rttvar="4322" to="100000"/>
+<times srtt="33255" rttvar="13132" to="100000"/>
 </host>
-<host starttime="1610695204" endtime="1610695351"><status state="up" reason="user-set" reason_ttl="0"/>
-<address addr="222.190.131.14" addrtype="ipv4"/>
+<host starttime="1613651850" endtime="1613651978"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="1.197.108.165" addrtype="ipv4"/>
 <hostnames>
 </hostnames>
-<ports><extraports state="closed" count="9958">
-<extrareasons reason="resets" count="9958"/>
-</extraports>
-<port protocol="tcp" portid="80"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http" method="table" conf="3"/></port>
-<port protocol="tcp" portid="85"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="mit-ml-dev" method="table" conf="3"/></port>
-<port protocol="tcp" portid="139"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="netbios-ssn" method="table" conf="3"/></port>
-<port protocol="tcp" portid="161"><state state="open" reason="syn-ack" reason_ttl="57"/><service name="snmp" method="table" conf="3"/></port>
-<port protocol="tcp" portid="443"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="https" method="table" conf="3"/></port>
-<port protocol="tcp" portid="445"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="microsoft-ds" method="table" conf="3"/></port>
-<port protocol="tcp" portid="554"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="rtsp" method="table" conf="3"/></port>
-<port protocol="tcp" portid="557"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="openvms-sysipc" method="table" conf="3"/></port>
-<port protocol="tcp" portid="559"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="teedtap" method="table" conf="3"/></port>
-<port protocol="tcp" portid="593"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http-rpc-epmap" method="table" conf="3"/></port>
-<port protocol="tcp" portid="655"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="tinc" method="table" conf="3"/></port>
-<port protocol="tcp" portid="707"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="borland-dsj" method="table" conf="3"/></port>
-<port protocol="tcp" portid="1000"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="cadlock" method="table" conf="3"/></port>
-<port protocol="tcp" portid="1443"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="ies-lm" method="table" conf="3"/></port>
-<port protocol="tcp" portid="2601"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="zebra" method="table" conf="3"/></port>
-<port protocol="tcp" portid="2602"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ripd" method="table" conf="3"/></port>
-<port protocol="tcp" portid="2604"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ospfd" method="table" conf="3"/></port>
-<port protocol="tcp" portid="2606"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="netmon" method="table" conf="3"/></port>
-<port protocol="tcp" portid="4431"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="wspipe" method="table" conf="3"/></port>
-<port protocol="tcp" portid="4444"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="krb524" method="table" conf="3"/></port>
-<port protocol="tcp" portid="5000"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="upnp" method="table" conf="3"/></port>
-<port protocol="tcp" portid="5554"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="sgi-esphttp" method="table" conf="3"/></port>
-<port protocol="tcp" portid="6009"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="X11:9" method="table" conf="3"/></port>
-<port protocol="tcp" portid="6014"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="x11" method="table" conf="3"/></port>
-<port protocol="tcp" portid="7002"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="afs3-prserver" method="table" conf="3"/></port>
-<port protocol="tcp" portid="7087"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
-<port protocol="tcp" portid="7099"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="lazy-ptop" method="table" conf="3"/></port>
-<port protocol="tcp" portid="7302"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="swx" method="table" conf="3"/></port>
-<port protocol="tcp" portid="7660"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
-<port protocol="tcp" portid="8000"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="http-alt" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8010"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="xmpp" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8011"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="unknown" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8020"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="intu-ec-svcdisc" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8029"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="unknown" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8080"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="http-proxy" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8081"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="blackice-icecap" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8083"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="us-srv" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8088"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="radan-http" method="table" conf="3"/></port>
-<port protocol="tcp" portid="8603"><state state="open" reason="syn-ack" reason_ttl="54"/></port>
-<port protocol="tcp" portid="9092"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="XmlIpcRegSvc" method="table" conf="3"/></port>
-<port protocol="tcp" portid="9998"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="distinct32" method="table" conf="3"/></port>
-<port protocol="tcp" portid="9999"><state state="open" reason="syn-ack" reason_ttl="118"/><service name="abyss" method="table" conf="3"/></port>
+<ports><port protocol="tcp" portid="21"><state state="closed" reason="reset" reason_ttl="248"/><service name="ftp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="22"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ssh" method="table" conf="3"/></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="248"/><service name="telnet" servicefp="SF-Port23-TCP:V=7.70%I=7%D=2/18%Time=602E5F92%P=i686-pc-windows-windows%r(NULL,275,&quot;\xff\xfb\x01\xff\xfb\x01\xff\xfb\x01\xff\xfb\x03\xff\xfd\x18\xff\xfd\x1f\r\n\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\r\n\*\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20All\x20rights\x20reserved\x202014-2016\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20\x20\x20\x20\x20Without\x20the\x20owner&apos;s\x20prior\x20written\x20consent,\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20no\x20decompiling\x20or\x20reverse-engineering\x20shall\x20be\x20allowed\.\x20\*\r\n\*\x20Notice:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20\x20\x20\x20This\x20is\x20a\x20private\x20communication\x20system\.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20Unauthorized\x20access\x20or\x20use\x20may\x20lead\x20to\x20prosecution\.\x20\x20\x20\*\r\n\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\r\n\r\nWarning:\x20Telnet\x20is\x20not\x20a\x20secure\x20protocol,\x20and\x20it\x20is\x20recommended\x20to\x20use\x20Stelnet\.\x20\r\n\r\nLogin\x20authentication\r\n\r\n\r\nUsername:&quot;)%r(GenericLines,28B,&quot;\xff\xfb\x01\xff\xfb\x01\xff\xfb\x01\xff\xfb\x03\xff\xfd\x18\xff\xfd\x1f\r\n\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\r\n\*\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20All\x20rights\x20reserved\x202014-2016\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20\x20\x20\x20\x20Without\x20the\x20owner&apos;s\x20prior\x20written\x20consent,\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20no\x20decompiling\x20or\x20reverse-engineering\x20shall\x20be\x20allowed\.\x20\*\r\n\*\x20Notice:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20\x20\x20\x20This\x20is\x20a\x20private\x20communication\x20system\.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\*\r\n\*\x20\x20\x20Unauthorized\x20access\x20or\x20use\x20may\x20lead\x20to\x20prosecution\.\x20\x20\x20\*\r\n\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\r\n\r\nWarning:\x20Telnet\x20is\x20not\x20a\x20secure\x20protocol,\x20and\x20it\x20is\x20recommended\x20to\x20use\x20Stelnet\.\x20\r\n\r\nLogin\x20authentication\r\n\r\n\r\nUsername:\r\nUsername:\r\nUsername:&quot;);" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="closed" reason="reset" reason_ttl="248"/><service name="ms-sql-s" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6379"><state state="closed" reason="reset" reason_ttl="248"/><service name="redis" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="closed" reason="reset" reason_ttl="248"/><service name="ajp13" method="table" conf="3"/></port>
 </ports>
-<times srtt="8229" rttvar="943" to="100000"/>
+<times srtt="27200" rttvar="9762" to="100000"/>
 </host>
-<runstats><finished time="1610695438" timestr="Fri Jan 15 15:23:58 2021" elapsed="243.35" summary="Nmap done at Fri Jan 15 15:23:58 2021; 2 IP addresses (2 hosts up) scanned in 243.35 seconds" exit="success"/><hosts up="2" down="0" total="2"/>
+<host starttime="1613651850" endtime="1613651977"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="221.203.81.70" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="21"><state state="filtered" reason="host-prohibited" reason_ttl="54"/><service name="ftp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="ssh" product="OpenSSH" version="5.3" extrainfo="protocol 2.0" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:5.3</cpe></service></port>
+<port protocol="tcp" portid="23"><state state="filtered" reason="host-prohibited" reason_ttl="54"/><service name="telnet" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="filtered" reason="host-prohibited" reason_ttl="54"/><service name="ms-sql-s" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6379"><state state="filtered" reason="host-prohibited" reason_ttl="54"/><service name="redis" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="filtered" reason="host-prohibited" reason_ttl="54"/><service name="ajp13" method="table" conf="3"/></port>
+</ports>
+<times srtt="46642" rttvar="15239" to="107598"/>
+</host>
+<host starttime="1613651850" endtime="1613651977"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="60.175.166.243" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="21"><state state="closed" reason="reset" reason_ttl="57"/><service name="ftp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="22"><state state="filtered" reason="port-unreach" reason_ttl="57"/><service name="ssh" method="table" conf="3"/></port>
+<port protocol="tcp" portid="23"><state state="filtered" reason="port-unreach" reason_ttl="57"/><service name="telnet" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="open" reason="syn-ack" reason_ttl="119"/><service name="ms-sql-s" product="Microsoft SQL Server 2008 R2" version="10.50.1600; RTM" ostype="Windows" method="probed" conf="10"><cpe>cpe:/a:microsoft:sql_server:2008_r2:gold</cpe><cpe>cpe:/o:microsoft:windows</cpe></service></port>
+<port protocol="tcp" portid="6379"><state state="closed" reason="reset" reason_ttl="57"/><service name="redis" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="closed" reason="reset" reason_ttl="57"/><service name="ajp13" method="table" conf="3"/></port>
+</ports>
+<times srtt="17805" rttvar="6900" to="100000"/>
+</host>
+<host starttime="1613651850" endtime="1613651977"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="211.149.138.201" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="119"/><service name="ftp" product="Microsoft ftpd" ostype="Windows" method="probed" conf="10"><cpe>cpe:/a:microsoft:ftp_service</cpe><cpe>cpe:/o:microsoft:windows</cpe></service></port>
+<port protocol="tcp" portid="22"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ssh" method="table" conf="3"/></port>
+<port protocol="tcp" portid="23"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="telnet" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ms-sql-s" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6379"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="redis" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="ajp13" method="table" conf="3"/></port>
+</ports>
+<times srtt="41000" rttvar="30750" to="164000"/>
+</host>
+<host starttime="1613651850" endtime="1613651977"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="121.4.210.47" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="21"><state state="closed" reason="reset" reason_ttl="52"/><service name="ftp" method="table" conf="3"/></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="52"/><service name="ssh" product="OpenSSH" version="7.4" extrainfo="protocol 2.0" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:7.4</cpe></service></port>
+<port protocol="tcp" portid="23"><state state="closed" reason="reset" reason_ttl="52"/><service name="telnet" method="table" conf="3"/></port>
+<port protocol="tcp" portid="1433"><state state="closed" reason="reset" reason_ttl="52"/><service name="ms-sql-s" method="table" conf="3"/></port>
+<port protocol="tcp" portid="6379"><state state="closed" reason="reset" reason_ttl="52"/><service name="redis" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="open" reason="syn-ack" reason_ttl="52"/><service name="ajp13" product="Apache Jserv" extrainfo="Protocol v1.3" method="probed" conf="10"/></port>
+</ports>
+<times srtt="18770" rttvar="9777" to="100000"/>
+</host>
+<runstats><finished time="1613651978" timestr="Thu Feb 18 20:39:38 2021" elapsed="139.63" summary="Nmap done at Thu Feb 18 20:39:38 2021; 6 IP addresses (6 hosts up) scanned in 139.63 seconds" exit="success"/><hosts up="6" down="0" total="6"/>
 </runstats>
 </nmaprun>

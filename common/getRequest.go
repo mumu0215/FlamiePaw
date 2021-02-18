@@ -1,22 +1,23 @@
 package common
 
 import (
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"sync"
 )
 var userAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"
-func GetOne(group *sync.WaitGroup,client *http.Client,baseUrl chan string,rep chan string) {  //处理每个请求
+func GetOne(group *sync.WaitGroup,client *http.Client,myLog *log.Logger,baseUrl chan string,rep chan string) {  //处理每个请求
 	for url :=range baseUrl{
 		if url==""{
 			close(baseUrl)             //关闭target channel
 		}else {
 			temp,err:=oneWorker(client,url)
 			if err!=nil{
-				fmt.Println(url+": "+temp)
+				myLog.Println(err)
+				//fmt.Println(url+": "+temp)
 				//rep <-err.Error()
 			}else {
 				rep<-temp

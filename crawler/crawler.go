@@ -1,7 +1,6 @@
 package crawler
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/json-iterator/go"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -26,6 +25,7 @@ func getRandomUA() string {
 func getHeader() string {
 	var header CustomHeader
 	header.UserAgent=getRandomUA()
+	var json=jsoniter.ConfigCompatibleWithStandardLibrary
 	jsonHeader,err:=json.Marshal(header)
 	if err!=nil{
 		panic(err)

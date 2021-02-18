@@ -1,10 +1,14 @@
+GetTitle:
+  Thread: 15                        # 访问url获取title的线程
+  Proxy: none                       # 访问url获取title的代理
+  TimeOut: 2                        # 访问的超时时间，单位秒
 Chrome:
   Path: C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
-  MaxTapCount: 5
+  MaxTapCount: 5                    # crawler-go的最大标签数
 Crawler:
-  CrawlerThread: 8
-  FilterMode: smart
-  Proxy: http://127.0.0.1:8888/
-  PushToPoolMax: 10
+  CrawlerThread: 6                  # 开启crawler的线程数
+  FilterMode: smart                 # crawler-go的过滤模式
+  Proxy: http://127.0.0.1:8888/     # 请求推送的地址，一般为扫描器的监听地址
+  PushToPoolMax: 10                 # 发送爬虫结果到监听地址时的最大并发数
 
 

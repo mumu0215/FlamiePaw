@@ -5,7 +5,9 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,27 +21,36 @@ import (
  //routineCountTotal 线程
 var(
 	splitTool string           //换行符
-
+	MyConfig crawler.CrawlerConfig
+	MyLog *log.Logger
 	mode=flag.Int("m",0,"mode choice,1:parse from url list,-uF Needed;" +
 		"2:parse from port scan file,-pF or -xF Needed")
-	routineCountTotal=flag.Int("t",15,"thread")
-	myProxy=flag.String("p","","proxy")
 	urlFileName=flag.String("uF","","url file name")
 	portScanFileName=flag.String("pF","","yujian port scan file")
 	nmapXmlFileName=flag.String("xF","","nmap output xmlFileName")
-	timeOut=flag.Int("T",2,"request timeout seconds")
 	crawlerFlag=flag.Bool("crawler",false,"run crawler at last")
 	Banner=`
- ____  __      __    __  __  ____  ____  ____   __    _    _ 
-( ___)(  )    /__\  (  \/  )(_  _)( ___)(  _ \ /__\  ( \/\/ )
- )__)  )(__  /(__)\  )    (  _)(_  )__)  )___//(__)\  )    ( 
-(__)  (____)(__)(__)(_/\/\_)(____)(____)(__) (__)(__)(__/\__)`
+___________.__                 .__      __________                
+\_   _____/|  | _____    _____ |__| ____\______   \_____ __  _  __
+ |    __)  |  | \__  \  /     \|  |/ __ \|     ___/\__  \\ \/ \/ /
+ |     \   |  |__/ __ \|  Y Y  \  \  ___/|    |     / __ \\     / 
+ \___  /   |____(____  /__|_|  /__|\___  >____|    (____  /\/\_/  
+     \/              \/      \/        \/               \/        
+                                                          by 半九十`
 )
 
 func init()  {
 	//解析命令行，判断参数合法
 	flag.Parse()
-	if *routineCountTotal<1{
+	var errConfig error
+	fmt.Println(Banner)
+	fmt.Println("Parse Config File...")
+	MyConfig,errConfig=crawler.ParseCrawlerConfig("config.yaml")
+	if errConfig!=nil{
+		fmt.Println("Error occur in Parse Config file!")
+		os.Exit(1)
+	}
+	if MyConfig.MyGetTitle.Thread<1{
 		fmt.Println("Thread must more than one!")
 		os.Exit(0)
 	}
@@ -63,7 +74,7 @@ func init()  {
 			os.Exit(0)
 		}
 	}
-	if *timeOut<1{
+	if MyConfig.MyGetTitle.TimeOut<1{
 		fmt.Println("Set timeout more than 1 second")
 		os.Exit(0)
 	}
@@ -92,20 +103,19 @@ func getUrlFileToList(fileName string) []string {
 }
 func main() {
 	//flag.Parse()
-	fmt.Println(Banner)
 	client:=&http.Client{
-		Timeout:time.Duration(*timeOut)*time.Second,
+		Timeout:time.Duration(MyConfig.MyGetTitle.TimeOut)*time.Second,
 		Transport: &http.Transport{
 		//参数未知影响，目前不使用
 		//TLSHandshakeTimeout: time.Duration(timeout) * time.Second,
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	},}             //复用client
-	if *myProxy!=""{                   //设置代理
+	if MyConfig.MyGetTitle.Proxy!="none"{                   //设置代理
 		proxy := func(_ *http.Request) (*url.URL, error) {
-			return url.Parse(strings.TrimSpace(*myProxy))
+			return url.Parse(strings.TrimSpace(MyConfig.MyGetTitle.Proxy))
 		}
 		client=&http.Client{
-			Timeout:time.Duration(*timeOut)*time.Second,
+			Timeout:time.Duration(MyConfig.MyGetTitle.TimeOut)*time.Second,
 			Transport:&http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 			Proxy:                  proxy,
@@ -118,18 +128,32 @@ func main() {
 	targetScan:=make(chan string)
 	resultScan:=make(chan []string)
 
-	urlTitleFile,err:=os.OpenFile("urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	err:=os.MkdirAll("./Result",os.ModePerm)
+	if err!=nil{
+		fmt.Println("Fail to Create folder")
+		os.Exit(1)
+	}
+	urlTitleFile,err:=os.OpenFile("./Result/urlTitle.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for result")
 		os.Exit(1)
 	}
 	defer urlTitleFile.Close()
-	webToScan,err:=os.OpenFile("urlToScan.txt",os.O_TRUNC|os.O_RDWR|os.O_CREATE,0666)
+	webToScan,err:=os.OpenFile("./Result/url200.txt",os.O_TRUNC|os.O_RDWR|os.O_CREATE,0666)
 	if err!=nil{
 		fmt.Println("Fail to open file for scan")
 		os.Exit(1)
 	}
 	defer webToScan.Close()
+
+	logFile,err:=os.OpenFile("log.txt",os.O_RDWR|os.O_CREATE|os.O_APPEND,0666)
+	if err!=nil{
+		fmt.Println("Fail to Open file for log")
+		os.Exit(1)
+	}
+	defer logFile.Close()
+	MyLog=log.New(io.MultiWriter(logFile),"",log.Lshortfile|log.LstdFlags)
+
 	buf:=bufio.NewWriter(urlTitleFile)
 	scanBuf:=bufio.NewWriter(webToScan)
 	var scanUrlSlice []string
@@ -149,9 +173,9 @@ func main() {
 		}
 	}()
 	//根据线程分发任务
-	for i:=0;i<*routineCountTotal;i++{
+	for i:=0;i<MyConfig.MyGetTitle.Thread;i++{
 		wg.Add(1)
-		go common.GetOne(wg,client,target,result)
+		go common.GetOne(wg,client,MyLog,target,result)
 	}
 	if *crawlerFlag==true{
 		go func() {               //爬虫协程
@@ -165,16 +189,16 @@ func main() {
 			}
 		}()
 		//根据crawler线程分发任务
-		crawlerSetting,err:=crawler.ParseCrawlerConfig("config.yaml")
 		if err!=nil{
 			panic(err)
 		}
-		for i:=0;i<crawlerSetting.MyCrawler.CrawlerThread;i++{
+		for i:=0;i< MyConfig.MyCrawler.CrawlerThread;i++{
 			wgScan.Add(1)
-			go crawler.RunCrawler(wgScan,crawlerSetting,targetScan,resultScan)
+			go crawler.RunCrawler(wgScan, MyConfig,targetScan,resultScan)
 		}
 	}
 
+	fmt.Println("GetTitle Running...")
 	//mode 1
 	//接受url文件
 	var reportSlice []string
@@ -191,8 +215,10 @@ func main() {
 			os.Exit(1)
 		}
 		reportSlice=reportTempSlice
-		for _,singleUrl:=range tempSlice{
-			target<-singleUrl
+		if len(tempSlice)!=0{
+			for _,singleUrl:=range tempSlice{
+				target<-singleUrl
+			}
 		}
 	}else if *mode==2 && *nmapXmlFileName!=""{ //mode 2 nmap扫描结果输入
 		tempSlice,reportTempSlice,err:=common.ParseXml(*nmapXmlFileName,splitTool)
@@ -201,14 +227,18 @@ func main() {
 			os.Exit(1)
 		}
 		reportSlice=reportTempSlice
-		for _,singleUrl:=range tempSlice{
-			target<-singleUrl
+		if len(tempSlice)!=0{
+			for _,singleUrl:=range tempSlice{
+				target<-singleUrl
+			}
 		}
 	}
-	target<-""   //工作分发结束
+	if reportSlice[0]!="0" || reportSlice[len(reportSlice)-1]!="0"{
+		target<-""   //工作分发结束
+	}
 	wg.Wait()
 	result<-""   //发出结果中断信号
-
+	fmt.Println("GetTitle Done!")
 	if *mode==2 && len(reportSlice)!=0 && *portScanFileName!=""{
 		fmt.Println("Found Information:")
 		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
@@ -232,4 +262,5 @@ func main() {
 		wgScan.Wait()
 		resultScan<-[]string{"stop"}
 	}
+	fmt.Println("ALL DONE !")
 }

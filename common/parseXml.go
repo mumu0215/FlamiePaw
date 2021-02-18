@@ -1,6 +1,7 @@
 package common
 
 import (
+	jsoniter "github.com/json-iterator/go"
 	"github.com/n0ncetonic/nmapxml"
 	"os"
 	"strconv"
@@ -22,6 +23,18 @@ func ParseXml(xmlFileName string,sp string) ([]string,[]string,error){
 }
 func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	url:=""
+	var (
+		sshSlice []string
+		telnetSlice []string
+		ftpSlice []string
+		mysqlSlice []string
+		mssqlSlice []string
+		ajp13Slice []string
+		redisSlice []string
+		serviceList ServiceList
+		tempSlice []Service
+	)
+
 	ssh:=""
 	redis:=""
 	telnet:=""
@@ -57,24 +70,31 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 				//这边因为服务名可能有字符串出入，暂时不判断
 				case "ssh":
 					ssh+=ipAddr+":"+portID+sp
+					sshSlice=append(sshSlice,ipAddr+":"+portID)
 					countSsh+=1
 				case "redis":
-					redis+=ipAddr+":"+sp
+					redis+=ipAddr+":"+portID+sp
+					redisSlice=append(redisSlice,ipAddr+":"+portID)
 					countRedis+=1
 				case "telnet":
-					telnet+=ipAddr+":"+sp
+					telnet+=ipAddr+":"+portID+sp
+					telnetSlice=append(telnetSlice,ipAddr+":"+portID)
 					countTelnet+=1
 				case "ftp":
-					ftp+=ipAddr+":"+sp
+					ftp+=ipAddr+":"+portID+sp
+					ftpSlice=append(ftpSlice,ipAddr+":"+portID)
 					countFtp+=1
 				case "mysql":
-					mysql+=ipAddr+":"+sp
+					mysql+=ipAddr+":"+portID+sp
+					mysqlSlice=append(mysqlSlice,ipAddr+":"+portID)
 					countMysql+=1
 				case "ms-sql-s":
-					mssql+=ipAddr+":"+sp
+					mssql+=ipAddr+":"+portID+sp
+					mssqlSlice=append(mssqlSlice,ipAddr+":"+portID)
 					countMssql+=1
 				case "ajp13":
-					ajp13+=ipAddr+":"+sp
+					ajp13+=ipAddr+":"+portID+sp
+					ajp13Slice=append(ajp13Slice,ipAddr+":"+portID)
 					countAjp13+=1
 				default:      //未分类全部送去web检测
 					url+="http://"+ipAddr+":"+portID+sp
@@ -83,74 +103,93 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 			}
 		}
 	}
-	err:=os.MkdirAll("./XmlResult",os.ModePerm)
+	err:=os.MkdirAll("./Result",os.ModePerm)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
-	fileUrl,err:=os.OpenFile("./XmlResult/url.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	fileUrl,err:=os.OpenFile("./Result/NmapUrl.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
 	if err!=nil{
 		return strings.TrimSpace(url),[]string{},err
 	}
 	fileUrl.WriteString(url)
 	fileUrl.Close()
 
+	fileService,err:=os.OpenFile("./Result/NmapService.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
+	if err!=nil{
+		return strings.TrimSpace(url),[]string{},err
+	}
+
 	if countRedis>0{
-		fileRedis,err:=os.OpenFile("./XmlResult/redis.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileRedis.WriteString(redis)
-		fileRedis.Close()
+		fileService.WriteString("redis:"+sp)
+		fileService.WriteString(redis)
+		tempSlice=append(tempSlice,Service{
+			Service:    "redis",
+			IpPortList: redisSlice,
+		})
 	}
 	if countMssql>0{
-		fileMssql,err:=os.OpenFile("./XmlResult/mssql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileMssql.WriteString(mssql)
-		fileMssql.Close()
+		fileService.WriteString("mssql:"+sp)
+		fileService.WriteString(mssql)
+		tempSlice=append(tempSlice,Service{
+			Service:    "mssql",
+			IpPortList: mssqlSlice,
+		})
 	}
 	if countAjp13>0{
-		fileAjp13,err:=os.OpenFile("./XmlResult/ajp13.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileAjp13.WriteString(ajp13)
-		fileAjp13.Close()
+		fileService.WriteString("ajp1.3:"+sp)
+		fileService.WriteString(ajp13)
+		tempSlice=append(tempSlice,Service{
+			Service:    "ajp13",
+			IpPortList: ajp13Slice,
+		})
 	}
 	if countFtp>0{
-		fileFtp,err:=os.OpenFile("./XmlResult/ftp.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileFtp.WriteString(ftp)
-		fileFtp.Close()
+		fileService.WriteString("ftp:"+sp)
+		fileService.WriteString(ftp)
+		tempSlice=append(tempSlice,Service{
+			Service:    "ftp",
+			IpPortList: ftpSlice,
+		})
 	}
 	if countTelnet>0{
-		fileTelnet,err:=os.OpenFile("./XmlResult/telnet.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileTelnet.WriteString(telnet)
-		fileTelnet.Close()
+		fileService.WriteString("telnet:"+sp)
+		fileService.WriteString(telnet)
+		tempSlice=append(tempSlice,Service{
+			Service:    "telnet",
+			IpPortList: telnetSlice,
+		})
 	}
 
 	if countSsh>0{
-		fileSsh,err:=os.OpenFile("./XmlResult/ssh.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileSsh.WriteString(ssh)
-		fileSsh.Close()
+		fileService.WriteString("ssh:"+sp)
+		fileService.WriteString(ssh)
+		tempSlice=append(tempSlice,Service{
+			Service:    "ssh",
+			IpPortList: sshSlice,
+		})
 	}
 	if countMysql>0{
-		fileMysql,err:=os.OpenFile("./XmlResult/mysql.txt",os.O_CREATE|os.O_TRUNC|os.O_RDWR,0666)
-		if err!=nil{
-			return strings.TrimSpace(url),[]string{},err
-		}
-		fileMysql.WriteString(mysql)
-		fileMysql.Close()
+		fileService.WriteString("mysql:"+sp)
+		fileService.WriteString(mysql)
+		tempSlice=append(tempSlice,Service{
+			Service:    "mysql",
+			IpPortList: mysqlSlice,
+		})
 	}
+	fileService.Close()
+
+	serviceList.ServiceList=tempSlice
+	var json=jsoniter.ConfigCompatibleWithStandardLibrary
+	jsonData,err:=json.MarshalToString(serviceList)
+	if err!=nil{
+		return strings.TrimSpace(url),[]string{},err
+	}
+	fileJson,err:=os.OpenFile("./Result/Nmap.json",os.O_RDWR|os.O_TRUNC|os.O_CREATE,0666)
+	if err!=nil{
+		return strings.TrimSpace(url),[]string{},err
+	}
+	fileJson.WriteString(jsonData)
+	fileJson.Close()
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(countTelnet),
 		strconv.Itoa(countFtp),strconv.Itoa(countAjp13),strconv.Itoa(countMysql),strconv.Itoa(countMssql),
