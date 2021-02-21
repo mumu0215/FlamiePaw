@@ -53,7 +53,7 @@ SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、MongoDB、Oracle
 
 **输出样例：**
 
-<img src="pic/Snipaste_2021-02-21_22-18-49.png" width="80%" height="80%"  />
+<img src="pic/1.png" width="80%" height="80%"  />
 
 ##### 输出文件：
 
