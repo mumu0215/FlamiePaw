@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/n0ncetonic/nmapxml"
 	"os"
@@ -10,6 +11,9 @@ import (
 //解析nmap输出的xml文件
 //error统一返回上层处理
 func ParseXml(xmlFileName string,sp string) ([]string,[]string,error){
+	if temp:=strings.Split(xmlFileName,".");temp[len(temp)-1]!="xml"{
+		return []string{},[]string{},errors.New("file type error,need xml file")
+	}
 	scanData,err:=nmapxml.Readfile(xmlFileName)
 	if err!=nil{
 		//fmt.Println("Read XML FileName Failed!")
@@ -32,6 +36,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 		ajp13Slice []string
 		redisSlice []string
 		mongodbSlice []string
+		oracleSlice []string
 		serviceList ServiceList
 		tempSlice []Service
 	)
@@ -44,6 +49,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	mssql:=""
 	ajp13:=""
 	mongodb:=""
+	oracle:=""
 	//计数
 	countRedis:=0
 	countUrl:=0
@@ -55,6 +61,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	countMssql:=0
 	countAjp13:=0
 	countMongoDB:=0
+	countOracle:=0
 	hostSlice:=r.Host
 	for _,host:=range hostSlice{
 		ipAddr:=host.Address.Addr
@@ -102,6 +109,10 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 					mongodb+=ipAddr+":"+portID+sp
 					mongodbSlice=append(mongodbSlice,ipAddr+":"+portID)
 					countMongoDB+=1
+				case "oracle-tns":
+					oracle+=ipAddr+":"+portID+sp
+					oracleSlice=append(oracleSlice,ipAddr+":"+portID)
+					countOracle+=1
 				default:      //未分类全部送去web检测
 					url+="http://"+ipAddr+":"+portID+sp
 					unknown+=1
@@ -190,6 +201,14 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 			IpPortList: mongodbSlice,
 		})
 	}
+	if countOracle>0{
+		fileService.WriteString("oracle:"+sp)
+		fileService.WriteString(oracle)
+		tempSlice=append(tempSlice,Service{
+			Service:    "oracle-tns",
+			IpPortList: oracleSlice,
+		})
+	}
 	fileService.Close()
 
 	serviceList.ServiceList=tempSlice
@@ -207,7 +226,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(countTelnet),
 		strconv.Itoa(countFtp),strconv.Itoa(countAjp13),strconv.Itoa(countMysql),strconv.Itoa(countMssql),
-		strconv.Itoa(countRedis),strconv.Itoa(countMongoDB),strconv.Itoa(unknown)},nil
+		strconv.Itoa(countRedis),strconv.Itoa(countMongoDB),strconv.Itoa(countOracle),strconv.Itoa(unknown)},nil
 }
 
 

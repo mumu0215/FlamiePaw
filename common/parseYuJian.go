@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"github.com/json-iterator/go"
 	"io/ioutil"
 	"os"
@@ -20,6 +21,7 @@ func doWork(input []string,sp string) (string,[]string,error) {
 		ajp13Slice []string
 		redisSlice []string
 		mongodbSlice []string
+		oracleSlice []string
 		serviceList ServiceList
 		tempSlice []Service
 		)
@@ -32,6 +34,7 @@ func doWork(input []string,sp string) (string,[]string,error) {
 	ajp13:=""
 	redis:=""
 	mongodb:=""
+	oracle:=""
 	//计数
 	countMongoDb:=0
 	countRedis:=0
@@ -42,6 +45,7 @@ func doWork(input []string,sp string) (string,[]string,error) {
 	countMysql:=0
 	countMssql:=0
 	countAjp13:=0
+	countOracle:=0
 	countUnknow:=0
 	for _,temp:=range input{
 		sList:=strings.Split(strings.TrimSpace(temp),"\t")
@@ -97,6 +101,10 @@ func doWork(input []string,sp string) (string,[]string,error) {
 			mongodb+=sList[1]+sp
 			mongodbSlice=append(mongodbSlice,sList[1])
 			countMongoDb+=1
+		case "oracle-tns":
+			oracle+=sList[1]+sp
+			oracleSlice=append(oracleSlice,sList[1])
+			countOracle+=1
 		default:
 			url+="http://"+sList[1]+sp //未分类送去web检测
 			countUnknow+=1
@@ -184,6 +192,15 @@ func doWork(input []string,sp string) (string,[]string,error) {
 			IpPortList: mssqlSlice,
 		})
 	}
+	if countOracle>0{
+		fileService.WriteString("oracle:"+sp)
+		fileService.WriteString(oracle)
+		tempSlice=append(tempSlice,Service{
+			Service:    "oracle-tns",
+			IpPortList: oracleSlice,
+		})
+	}
+
 	fileService.Close()
 	serviceList.ServiceList=tempSlice
 	var json=jsoniter.ConfigCompatibleWithStandardLibrary
@@ -201,9 +218,12 @@ func doWork(input []string,sp string) (string,[]string,error) {
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),
 		strconv.Itoa(countTelnet),strconv.Itoa(countFtp),strconv.Itoa(countAjp13),
 		strconv.Itoa(countMysql),strconv.Itoa(countMssql),strconv.Itoa(countRedis),
-		strconv.Itoa(countMongoDb),strconv.Itoa(countUnknow)},nil
+		strconv.Itoa(countMongoDb),strconv.Itoa(countOracle),strconv.Itoa(countUnknow)},nil
 }
 func ParseYuJ(portScanFile string,sp string) (a []string,b []string,err1 error) {
+	if temp:=strings.Split(portScanFile,".");temp[len(temp)-1]!="txt"{
+		return []string{},[]string{},errors.New("file type error,need portScan file")
+	}
 	dataByte,err:=ioutil.ReadFile(portScanFile)
 	if err!=nil{
 		//fmt.Println("Fail to open portscanFile!")
