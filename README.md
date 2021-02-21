@@ -27,17 +27,17 @@ Command:
 
 ##### 目前支持分捡的协议：
 
-SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、(MongoDB)
+SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、MongoDB、Oracle
 
-##### (1）直接处理url：
-   web探测结果保存在.\Result\urlTitle.txt中
+##### (1）处理url，探测web title：
 ```
 	go run getTitle.go -m 1 -uF url1.txt
 ```
-##### (2）处理御剑导出结果：
-   web探测结果保存在.\Result\urlTitle.txt中，其他端口服务结果保存在.\Result\YuJianService.txt，json输出.\Result\YuJian.json
+##### (2）处理端扫导出文件
 
-​	目前只挑选了一部分服务，例如mysql等；
+##### web探测结果保存在.\Result\urlTitle.txt中，其他端口服务结果文本格式和json格式保存在.\Result\下
+
+1. ###### 处理御剑导出结果：
 
 ```
 	go run getTitle.go -m 2 -pF PortScanList1.txt
@@ -46,34 +46,25 @@ SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、(MongoDB)
 
 <img src="pic/yujian.png" width="50%" height="50%"  />
 
-   处理后的其他端口服务结果：
-
-<img src="pic/result.png" width="50%" height="50%" />
-
-##### 输出样例：
-
-<img src="pic/Snipaste_2021-01-19_14-34-39.png" width="50%" height="50%" />
-
-<img src="pic/title.png" width="50%" height="50%" />
-
-##### （3）处理Nmap导出XML文件结果：
+######     2.处理Nmap导出XML文件结果：
 ```
 	go run getTitle.go -m 2 -xF output.xml
 ```
 
- web探测结果保存在.\Result\urlTitle.txt中，其他端口服务结果保存在.\Result\NmapService.txt，json输出.\Result\Nmap.json
-
 **输出样例：**
 
-<img src="pic/Snipaste_2021-01-26_00-32-54.png" width="50%" height="50%" />
+<img src="pic/Snipaste_2021-02-21_22-18-49.png" width="80%" height="80%"  />
 
-<img src="pic/Snipaste_2021-01-26_00-38-19.png" width="50%" height="50%" />
+##### 输出文件：
+
+<img src="pic/re.png" width="80%" height="80%"  />
 
 
 ### ToDo：
 - [x] 文本处理区别不同系统换行符
 - [x] 添加访问代理
 - [x] 链接端口扫描结果处理的工具实现整合
+- [ ] 添加分拣出service的未授权访问扫描
 
 
 

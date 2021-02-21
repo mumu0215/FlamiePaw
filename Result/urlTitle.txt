@@ -1,0 +1,17 @@
+http://121.4.210.47:8080                	200	NULL_server!        	Apache Tomcat/8.5.43
+https://106.53.83.82:443                	404	NULL_server!        	HTTP Status 404 – Not Found
+http://221.226.253.50:85                	404	NULL_server!        	Error 404--Not Found
+http://221.226.253.50:7001              	404	Apache-Coyote/1.1   	NULL_title!
+https://1.197.108.165:8443              	200	HTTP Server 1.0     	NULL_title!
+http://221.226.253.50:8082              	404	NULL_server!        	NULL_title!
+http://106.53.83.82:8088                	404	NULL_server!        	HTTP Status 404 – Not Found
+http://182.254.227.33:8000              	404	WSGIServer/0.2 CPython/3.8.5	Page not found at /
+http://221.226.253.50:8083              	200	nginx/1.17.6        	NULL_title!
+http://221.226.253.50:9001              	200	Microsoft-IIS/10.0  	NULL_title!
+http://221.203.81.70:80                 	500	Apache Coyote/1.0   	NULL_title!
+http://221.226.253.50:8088              	200	Microsoft-IIS/10.0  	服务大厅
+http://221.203.81.70:9521               	500	Apache Coyote/1.0   	NULL_title!
+http://221.226.253.50:8484              	200	Apache-Coyote/1.1   	预订服务平台
+http://211.149.138.201:80               	200	wts/1.2             	很抱歉，不能直接使用IP访问网站
+http://221.226.253.50:8585              	200	Apache-Coyote/1.1   	校园预订服务
+http://221.226.253.50:8079              	200	Apache-Coyote/1.1   	预订平台

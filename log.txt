@@ -1,0 +1,20 @@
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8019": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8808": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8881": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8889": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8005": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8010": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8812": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8021": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8887": EOF
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8002": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8001": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8882": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://182.254.227.33:139": net/http: HTTP/1.x transport connection broken: malformed HTTP response "\x83\x00\x00\x01\x8f"
+2021/02/21 22:17:33 getRequest.go:19: Get "https://106.53.83.82:3389": remote error: tls: internal error
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8014": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "https://182.254.227.33:3389": remote error: tls: internal error
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8022": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:33 getRequest.go:19: Get "http://1.197.108.165:8018": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:34 getRequest.go:19: Get "http://1.197.108.165:8006": net/http: HTTP/1.x transport connection broken: malformed HTTP status code "TCP"
+2021/02/21 22:17:35 getRequest.go:19: Get "http://182.254.227.33:135": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
