@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///D:/Nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.70 scan initiated Sun Feb 21 15:52:18 2021 as: D:\\Nmap\\nmap.exe -sS -Pn -sV -p 1521 -oX .\\s.xml 221.203.81.70 -->
+<nmaprun scanner="nmap" args="D:\\Nmap\\nmap.exe -sS -Pn -sV -p 1521 -oX .\\s.xml 221.203.81.70" start="1613893938" startstr="Sun Feb 21 15:52:18 2021" version="7.70" xmloutputversion="1.04">
+<scaninfo type="syn" protocol="tcp" numservices="1" services="1521"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1613893943" endtime="1613893950"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="221.203.81.70" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="1521"><state state="open" reason="syn-ack" reason_ttl="54"/><service name="oracle-tns" product="Oracle TNS listener" version="11.2.0.4.0" extrainfo="unauthorized" method="probed" conf="10"><cpe>cpe:/a:oracle:database_server:11.2.0.4.0</cpe></service></port>
+</ports>
+<times srtt="48000" rttvar="48000" to="240000"/>
+</host>
+<runstats><finished time="1613893950" timestr="Sun Feb 21 15:52:30 2021" elapsed="11.65" summary="Nmap done at Sun Feb 21 15:52:30 2021; 1 IP address (1 host up) scanned in 11.65 seconds" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

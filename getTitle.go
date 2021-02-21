@@ -249,7 +249,8 @@ func main() {
 		fmt.Println("Found Information:")
 		fmt.Println("\tUrl:"+reportSlice[0]+"    SSH:"+reportSlice[1]+"    Telnet:"+reportSlice[2])
 		fmt.Println("\tFTP:"+reportSlice[3]+"    AJP13:"+reportSlice[4]+"    Mysql:"+reportSlice[5])
-		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    UnKnow:"+reportSlice[8])
+		fmt.Println("\tMssql:"+reportSlice[6]+"    Redis:"+reportSlice[7]+"    MongoDB:"+reportSlice[8])
+		fmt.Println("\tUnKnow:"+reportSlice[9])
 	}
 	if *crawlerFlag==true{
 		fmt.Println("Crawler Running...")

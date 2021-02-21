@@ -31,6 +31,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 		mssqlSlice []string
 		ajp13Slice []string
 		redisSlice []string
+		mongodbSlice []string
 		serviceList ServiceList
 		tempSlice []Service
 	)
@@ -42,7 +43,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	mysql:=""
 	mssql:=""
 	ajp13:=""
-
+	mongodb:=""
 	//计数
 	countRedis:=0
 	countUrl:=0
@@ -53,6 +54,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 	countMysql:=0
 	countMssql:=0
 	countAjp13:=0
+	countMongoDB:=0
 	hostSlice:=r.Host
 	for _,host:=range hostSlice{
 		ipAddr:=host.Address.Addr
@@ -96,6 +98,10 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 					ajp13+=ipAddr+":"+portID+sp
 					ajp13Slice=append(ajp13Slice,ipAddr+":"+portID)
 					countAjp13+=1
+				case "mongodb":
+					mongodb+=ipAddr+":"+portID+sp
+					mongodbSlice=append(mongodbSlice,ipAddr+":"+portID)
+					countMongoDB+=1
 				default:      //未分类全部送去web检测
 					url+="http://"+ipAddr+":"+portID+sp
 					unknown+=1
@@ -176,6 +182,14 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 			IpPortList: mysqlSlice,
 		})
 	}
+	if countMongoDB>0{
+		fileService.WriteString("mongodb:"+sp)
+		fileService.WriteString(mongodb)
+		tempSlice=append(tempSlice,Service{
+			Service:    "mongodb",
+			IpPortList: mongodbSlice,
+		})
+	}
 	fileService.Close()
 
 	serviceList.ServiceList=tempSlice
@@ -193,7 +207,7 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 
 	return strings.TrimSpace(url),[]string{strconv.Itoa(countUrl),strconv.Itoa(countSsh),strconv.Itoa(countTelnet),
 		strconv.Itoa(countFtp),strconv.Itoa(countAjp13),strconv.Itoa(countMysql),strconv.Itoa(countMssql),
-		strconv.Itoa(countRedis),strconv.Itoa(unknown)},nil
+		strconv.Itoa(countRedis),strconv.Itoa(countMongoDB),strconv.Itoa(unknown)},nil
 }
 
 

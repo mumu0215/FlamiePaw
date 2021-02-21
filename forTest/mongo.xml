@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///D:/Nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.91 scan initiated Sun Feb 21 17:41:27 2021 as: D:\\Nmap\\nmap.exe -sS -Pn -sV -p 27017 -oX .\\mongo.xml 106.53.83.82 -->
+<nmaprun scanner="nmap" args="D:\\Nmap\\nmap.exe -sS -Pn -sV -p 27017 -oX .\\mongo.xml 106.53.83.82" start="1613900487" startstr="Sun Feb 21 17:41:27 2021" version="7.91" xmloutputversion="1.05">
+<scaninfo type="syn" protocol="tcp" numservices="1" services="27017"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1613900488" endtime="1613900494"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="106.53.83.82" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="27017"><state state="open" reason="syn-ack" reason_ttl="116"/><service name="mongodb" product="MongoDB" version="3.4.10" method="probed" conf="10"><cpe>cpe:/a:mongodb:mongodb:3.4.10</cpe></service></port>
+</ports>
+<times srtt="29000" rttvar="29000" to="145000"/>
+</host>
+<runstats><finished time="1613900494" timestr="Sun Feb 21 17:41:34 2021" summary="Nmap done at Sun Feb 21 17:41:34 2021; 1 IP address (1 host up) scanned in 7.06 seconds" elapsed="7.06" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>
