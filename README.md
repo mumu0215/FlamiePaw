@@ -59,6 +59,18 @@ SSH、FTP、MySQL、MSSQL、Telnet、ajp13、Redis、MongoDB、Oracle
 
 <img src="pic/re.png" width="80%" height="80%"  />
 
+##### （3）分拣结束运行crawler
+```
+	go run getTitle.go -m 2 -pF PortScanList.txt -crawler
+```
+
+此功能需要配置文件配置xray监听地址，以及一些crawlergo的基本配（详见官网），配置文件如下：
+
+<img src="pic/config.png" width="80%" height="80%"  />
+
+输出样例：
+
+<img src="pic/scan.png" width="80%" height="80%"  />
 
 ### ToDo：
 - [x] 文本处理区别不同系统换行符
