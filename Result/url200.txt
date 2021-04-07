@@ -1,9 +1,21 @@
-http://121.4.210.47:8080                	200	NULL_server!        	Apache Tomcat/8.5.43
-http://221.226.253.50:8083              	200	nginx/1.17.6        	NULL_title!
-https://1.197.108.165:8443              	200	HTTP Server 1.0     	NULL_title!
-http://221.226.253.50:8088              	200	Microsoft-IIS/10.0  	服务大厅
-http://221.226.253.50:8484              	200	Apache-Coyote/1.1   	预订服务平台
-http://221.226.253.50:9001              	200	Microsoft-IIS/10.0  	NULL_title!
-http://221.226.253.50:8079              	200	Apache-Coyote/1.1   	预订平台
-http://221.226.253.50:8585              	200	Apache-Coyote/1.1   	校园预订服务
-http://211.149.138.201:80               	200	wts/1.2             	很抱歉，不能直接使用IP访问网站
+https://test-admin.cantonfair.org.cn    	200	nginx               	组展单位管理服务系统-中国进出口商品交易会
+https://mail.cantonfair.org.cn          	200	web                 	登录企业邮箱-mail.263.net企业邮箱
+https://msg.cantonfair.org.cn           	200	nginx               	广交会 Cantonfair
+https://admin.cantonfair.org.cn         	200	nginx               	组展单位管理服务系统-中国进出口商品交易会
+https://www.cantonfair.org.cn           	200	nginx               	中国进出口商品交易会（广交会）官方网站
+https://ad.cantonfair.org.cn            	200	nginx               	NULL_title!
+https://user.cantonfair.org.cn          	200	nginx               	登录
+https://bi.cantonfair.org.cn            	200	nginx               	NULL_title!
+https://conf.cantonfair.org.cn          	200	nginx               	NULL_title!
+https://intl.cantonfair.org.cn          	200	nginx               	参展易捷通-进口展-中国进出口商品交易会
+https://newspaper.cantonfair.org.cn     	200	nginx               	NULL_title!
+https://import.cantonfair.org.cn        	200	nginx               	参展易捷通-进口展-中国进出口商品交易会
+https://insight.cantonfair.org.cn       	200	nginx               	没有找到站点
+https://booking.cantonfair.org.cn       	200	nginx               	NULL_title!
+https://exhibitor.cantonfair.org.cn     	200	nginx               	参展易捷通-出口展-中国进出口商品交易会
+https://ex.cantonfair.org.cn            	200	nginx               	回到首页
+https://edm.cantonfair.org.cn           	200	nginx               	NULL_title!
+https://buyer.cantonfair.org.cn         	200	nginx               	采购商服务平台
+https://pri.cantonfair.org.cn           	200	nginx               	广交会 Cantonfair
+https://vr.cantonfair.org.cn            	200	nginx               	NULL_title!
+https://live.cantonfair.org.cn          	200	nginx               	中国进出口商品交易会

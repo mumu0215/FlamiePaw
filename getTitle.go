@@ -233,9 +233,14 @@ func main() {
 			}
 		}
 	}
-	if reportSlice[0]!="0" || reportSlice[len(reportSlice)-1]!="0"{
-		target<-""   //工作分发结束
+	if *mode!=1{
+		if reportSlice[0]!="0" || reportSlice[len(reportSlice)-1]!="0"{
+			target<-""   //工作分发结束
+		}
+	}else {
+		target<-""
 	}
+
 	wg.Wait()
 	result<-""   //发出结果中断信号
 	fmt.Println("GetTitle Done!")
