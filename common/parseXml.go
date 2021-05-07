@@ -115,7 +115,8 @@ func dealWithRun(r nmapxml.Run,sp string) (string,[]string,error) {
 					countOracle+=1
 				default:      //未分类全部送去web检测
 					url+="http://"+ipAddr+":"+portID+sp
-					unknown+=1
+					url+="https://"+ipAddr+":"+portID+sp
+					unknown+=2
 				}
 			}
 		}

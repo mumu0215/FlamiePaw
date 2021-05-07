@@ -62,7 +62,8 @@ func doWork(input []string,sp string) (string,[]string,error) {
 			countUrl+=1
 		case "-":
 			url+="http://"+sList[1]+sp
-			countUrl+=1
+			url+="https://"+sList[1]+sp
+			countUrl+=2
 		//case "unknow":
 		//	url+="http://"+sList[1]+sp
 		//	countUrl+=1
@@ -107,7 +108,8 @@ func doWork(input []string,sp string) (string,[]string,error) {
 			countOracle+=1
 		default:
 			url+="http://"+sList[1]+sp //未分类送去web检测
-			countUnknow+=1
+			url+="https://"+sList[1]+sp
+			countUnknow+=2
 		}
 	}
 	err:=os.MkdirAll("./Result",os.ModePerm)
