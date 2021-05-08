@@ -86,9 +86,11 @@ func getOutputContinually(name string, args ...string) []string{
 		panic(err)
 	}else {
 		temp:=strings.Split(string(opBytes),"--[Mission Complete]--")
-		tempj:=strings.TrimSpace(temp[1])
-		var json = jsoniter.ConfigCompatibleWithStandardLibrary
-		json.Unmarshal([]byte(tempj),&crawlerTemp)
+		if len(temp)>1{
+			tempj:=strings.TrimSpace(temp[1])
+			var json = jsoniter.ConfigCompatibleWithStandardLibrary
+			json.Unmarshal([]byte(tempj),&crawlerTemp)
+		}
 	}
 	cmd.Wait()
 	return crawlerTemp.SubDomainList
